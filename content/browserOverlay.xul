@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet type="text/css" href="chrome://global/skin/" ?>
+<?xml-stylesheet type="text/css" href="chrome://xulschoolhello/skin/browserOverlay.css" ?>
+
+<!DOCTYPE overlay SYSTEM "chrome://xulschoolhello/locale/browserOverlay.dtd">
+
+<overlay id="xulschoolhello-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browserOverlay.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browserFingerprint.js" />
+  
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="xulschoolhello-string-bundle" src="chrome://xulschoolhello/locale/browserOverlay.properties" />
+  </stringbundleset>
+
+  <menubar id="main-menubar">
+    <menu id="browsertrust-menu"
+      	label="&browsertrust.name;"
+      	accesskey="&browsertrust.menu.accesskey;"
+      	insertafter="helpMenu">
+      <menupopup>
+        <menuitem id="browsertrust-menu-item1"
+          	label="&browsertrust.welcome.label;"
+          	accesskey="&browsertrust.welcome.accesskey;"
+          	oncommand="BrowserTrust.HelloWorld.sayHello(event);" />
+		<menuitem id="browsertrust-menu-item2"
+          	label="&browsertrust.fingerprint.label;"
+          	accesskey="&browsertrust.fingerprint.accesskey;"
+          	oncommand="BrowserTrust.Fingerprint.fingerprintCurrentPage(event);" />
+      </menupopup>
+    </menu>
+  </menubar>
+</overlay>
