@@ -1,0 +1,13 @@
+To setup in eclipse
+1) Install Eclipse
+2) Goto http://www.spket.com/download.html and download the plugin
+3) Extract Spket and copy it into your exlipse folder
+4) Launch Eclipse
+5) Open Git Repositories by going to Window>Show View>Other
+6) Select Clone a Git Repository and use https://bitbucket.org/Cherry_Kerry/browsertrust as the URI
+
+To install into Firefox
+1) Edit brosertrust@aut.ac.nz to have the root path for the project in it
+2) Open Firefox
+3) Goto your Profile Folder, Help>Troubleshooting Information
+4) Copy the edited file into the Extensions your Profile Folder and restart Firefox
