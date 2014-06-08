@@ -9,6 +9,7 @@
 	
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browserOverlay.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browserFingerprint.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/robots.js" />
   
   <stringbundleset id="stringbundleset">
     <stringbundle id="xulschoolhello-string-bundle" src="chrome://xulschoolhello/locale/browserOverlay.properties" />
@@ -28,6 +29,10 @@
           	label="&browsertrust.fingerprint.label;"
           	accesskey="&browsertrust.fingerprint.accesskey;"
           	oncommand="BrowserTrust.Fingerprint.fingerprintCurrentPage(event);" />
+		<menuitem id="browsertrust-menu-item3"
+          	label="&browsertrust.robot.label;"
+          	accesskey="&browsertrust.robot.accesskey;"
+          	oncommand="BrowserTrust.Robot.showRobotsFile(event);" />
       </menupopup>
     </menu>
   </menubar>
