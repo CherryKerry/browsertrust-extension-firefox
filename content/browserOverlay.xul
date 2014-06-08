@@ -10,7 +10,7 @@
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTHelloWorld.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTEngine.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/lib/sha256.js" />
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/robots.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTrust.js" />
   
   <script>	
 	/**
@@ -44,9 +44,9 @@
           	accesskey="&browsertrust.fingerprint.accesskey;"
           	oncommand="hashCurrentPage();" />
 		<menuitem id="browsertrust-menu-item3"
-          	label="&browsertrust.robot.label;"
-          	accesskey="&browsertrust.robot.accesskey;"
-          	oncommand="BrowserTrust.Robot.showRobotsFile(event);" />
+          	label="&browsertrust.btrust.label;"
+          	accesskey="&browsertrust.btrust.accesskey;"
+          	oncommand="BrowserTrust.BTrust.getBTrustFile(event);" />
       </menupopup>
     </menu>
   </menubar>

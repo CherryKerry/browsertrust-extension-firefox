@@ -1,8 +1,8 @@
 <!ENTITY browsertrust.name			        	"Browser Trust">
 <!ENTITY browsertrust.welcome.label          	"Welcome">
 <!ENTITY browsertrust.fingerprint.label      	"Fingerprint">
-<!ENTITY browsertrust.robot.label      			"RobotsTest">
+<!ENTITY browsertrust.btrust.label      		"BTrustTest">
 <!ENTITY browsertrust.menu.accesskey    		"B">
 <!ENTITY browsertrust.welcome.accesskey    		"W">
 <!ENTITY browsertrust.fingerprint.accesskey    	"F">
-<!ENTITY browsertrust.robot.accesskey    		"R">
+<!ENTITY browsertrust.btrust.accesskey    		"R">

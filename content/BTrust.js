@@ -6,17 +6,17 @@ if ("undefined" == typeof(BrowserTrust)) {
 };
 
 /**
- * Currently working on linux /tmp/robots.txt not cross platform.
- * Calls the fetchRobots function to get the robots.txt file from the server, then output something to show sucessful retrieval
+ * Currently working on linux /tmp/btrust.txt not cross platform.
+ * Calls the getBtrust function to get the .txt file from the server, then output something to show successful retrieval
  */
-BrowserTrust.Robot = 
+BrowserTrust.BTrust = 
 {
-  showRobotsFile : function(aEvent) 
+  getBTrustFile : function(aEvent) 
   {
 
-  	window.alert("hello2");
+  	window.alert("Check for file /tmp/btrust.txt");
   	var file = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-	file.initWithPath("/tmp/robots.txt");
+	file.initWithPath("/tmp/btrust.txt");
 	var wbp = Components.classes['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Components.interfaces.nsIWebBrowserPersist);
 	var ios = Components.classes['@mozilla.org/network/io-service;1'].getService(Components.interfaces.nsIIOService);
 	var uri = ios.newURI("https://www.google.com/robots.txt", null, null);
