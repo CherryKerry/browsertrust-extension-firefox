@@ -7,9 +7,23 @@
 
 <overlay id="xulschoolhello-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browserOverlay.js" />
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browserFingerprint.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTHelloWorld.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTEngine.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/lib/sha256.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/robots.js" />
+  
+  <script>	
+	/**
+	 * Create a dialog box that has a Sha256 hash of the current page
+	 */
+	function hashCurrentPage() 
+  	{
+  		var html = BTEngine.getRootNode().innerHTML;
+  		var uri = BTEngine.getCurrentURI();
+	  	var hash = Sha256.hash(html, false);
+	  	window.alert("URI:" + uri + "\nHash:" + hash);
+	}
+  </script>
   
   <stringbundleset id="stringbundleset">
     <stringbundle id="xulschoolhello-string-bundle" src="chrome://xulschoolhello/locale/browserOverlay.properties" />
@@ -24,11 +38,11 @@
         <menuitem id="browsertrust-menu-item1"
           	label="&browsertrust.welcome.label;"
           	accesskey="&browsertrust.welcome.accesskey;"
-          	oncommand="BrowserTrust.HelloWorld.sayHello(event);" />
+          	oncommand="BTHelloWorld.sayHello(event);" />
 		<menuitem id="browsertrust-menu-item2"
           	label="&browsertrust.fingerprint.label;"
           	accesskey="&browsertrust.fingerprint.accesskey;"
-          	oncommand="BrowserTrust.Fingerprint.fingerprintCurrentPage(event);" />
+          	oncommand="hashCurrentPage();" />
 		<menuitem id="browsertrust-menu-item3"
           	label="&browsertrust.robot.label;"
           	accesskey="&browsertrust.robot.accesskey;"
@@ -36,4 +50,7 @@
       </menupopup>
     </menu>
   </menubar>
+  
+  
+  
 </overlay>
