@@ -11,8 +11,9 @@
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTEngine.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/lib/sha256.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTrust.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/storage.js" />
   
-  <script>	
+  <script>  	
 	/**
 	 * Create a dialog box that has a Sha256 hash of the current page
 	 */
@@ -47,6 +48,10 @@
           	label="&browsertrust.btrust.label;"
           	accesskey="&browsertrust.btrust.accesskey;"
           	oncommand="BrowserTrust.BTrust.getBTrustFile(event);" />
+		<menuitem id="browsertrust-menu-item4"
+          	label="&browsertrust.storage.label;"
+          	accesskey="&browsertrust.storage.accesskey;"
+          	oncommand="BrowserTrust.Storage.storeFingerprint(event);" />
       </menupopup>
     </menu>
   </menubar>
