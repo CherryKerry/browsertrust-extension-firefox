@@ -1,10 +1,4 @@
 <!ENTITY browsertrust.name			        	"Browser Trust">
-<!ENTITY browsertrust.welcome.label          	"Welcome">
-<!ENTITY browsertrust.fingerprint.label      	"Fingerprint">
-<!ENTITY browsertrust.btrust.label      		"BTrustTest">
-<!ENTITY browsertrust.storage.label      		"storage">
+<!ENTITY browsertrust.test.label          		"Test">
 <!ENTITY browsertrust.menu.accesskey    		"B">
-<!ENTITY browsertrust.welcome.accesskey    		"W">
-<!ENTITY browsertrust.fingerprint.accesskey    	"F">
-<!ENTITY browsertrust.btrust.accesskey    		"R">
-<!ENTITY browsertrust.storage.accesskey    		"S">
+<!ENTITY browsertrust.test.accesskey    		"T">

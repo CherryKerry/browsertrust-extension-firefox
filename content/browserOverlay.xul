@@ -7,24 +7,12 @@
 
 <overlay id="xulschoolhello-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTHelloWorld.js" />
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTEngine.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/test/BTTest.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/lib/sha256.js" />
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/BTrust.js" />
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/storage.js" />
-  
-  <script>  	
-	/**
-	 * Create a dialog box that has a Sha256 hash of the current page
-	 */
-	function hashCurrentPage() 
-  	{
-  		var html = BTEngine.getRootNode().innerHTML;
-  		var uri = BTEngine.getCurrentURI();
-	  	var hash = Sha256.hash(html, false);
-	  	window.alert("URI:" + uri + "\nHash:" + hash);
-	}
-  </script>
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/HelloWorld.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/Engine.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/BTrust.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/storage.js" />
   
   <stringbundleset id="stringbundleset">
     <stringbundle id="xulschoolhello-string-bundle" src="chrome://xulschoolhello/locale/browserOverlay.properties" />
@@ -37,25 +25,11 @@
       	insertafter="helpMenu">
       <menupopup>
         <menuitem id="browsertrust-menu-item1"
-          	label="&browsertrust.welcome.label;"
-          	accesskey="&browsertrust.welcome.accesskey;"
-          	oncommand="BTHelloWorld.sayHello(event);" />
-		<menuitem id="browsertrust-menu-item2"
-          	label="&browsertrust.fingerprint.label;"
-          	accesskey="&browsertrust.fingerprint.accesskey;"
-          	oncommand="hashCurrentPage();" />
-		<menuitem id="browsertrust-menu-item3"
-          	label="&browsertrust.btrust.label;"
-          	accesskey="&browsertrust.btrust.accesskey;"
-          	oncommand="BrowserTrust.BTrust.getBTrustFile(event);" />
-		<menuitem id="browsertrust-menu-item4"
-          	label="&browsertrust.storage.label;"
-          	accesskey="&browsertrust.storage.accesskey;"
-          	oncommand="BrowserTrust.Storage.storeFingerprint(event);" />
+          	label="&browsertrust.test.label;"
+          	accesskey="&browsertrust.test.accesskey;"
+          	oncommand="BrowserTrust.Test.start();" />
       </menupopup>
     </menu>
   </menubar>
-  
-  
   
 </overlay>
