@@ -24,6 +24,7 @@ BrowserTrust.Test =
 		test += "3) Get BTrust File\n " + BrowserTrust.BTrust.getBTrustFile();
 		//Store fingerprint - Not working atm
 		//BrowserTrust.Storage.storeFingerprint(fingerprint);
+
 		alert(test);
 	}
 };

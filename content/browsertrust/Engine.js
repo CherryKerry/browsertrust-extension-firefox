@@ -14,6 +14,21 @@ if ("undefined" == typeof(BrowserTrust)) {
 BrowserTrust.Engine = 
 {
 	/**
+	 * Method that creates a fingerprint object given a uri and string data to fingerprint
+	 * 
+	 * @param {String} uri location of the resource
+	 * @param {String} data string of the resource to be hashed
+	 * @return {Fingerprint} a fingerprint with hash and uri property
+	 */
+	fingerprint : function(uri, data) {
+		var fingerprint = {
+			hash:Sha256.hash(data, false),
+			uri	:uri
+		};
+		return fingerprint;
+	},
+	
+	/**
 	 * Method to be called to create a fingerprint for the currently active
 	 * window html
 	 * 
@@ -23,10 +38,9 @@ BrowserTrust.Engine =
 	fingerprintHtml : function()
 	{
 		var DOM = BrowserTrust.Engine.getWindowDocument();
-		var fingerprint = {
-			hash:Sha256.hash(DOM.documentElement.innerHTML, false),
-			uri	:DOM.documentURI
-		}
+		var fingerprint = BrowserTrust.Engine.fingerprint(
+				DOM.documentURI, 
+				DOM.documentElement.innerHTML);
 		return fingerprint;
 	},
 	

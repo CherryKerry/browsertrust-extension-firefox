@@ -7,12 +7,12 @@
 
 <overlay id="xulschoolhello-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/test/BTTest.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/test/Test.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/lib/sha256.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/HelloWorld.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/Engine.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/BTrust.js" />
-  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/storage.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/Storage.js" />
   
   <stringbundleset id="stringbundleset">
     <stringbundle id="xulschoolhello-string-bundle" src="chrome://xulschoolhello/locale/browserOverlay.properties" />
