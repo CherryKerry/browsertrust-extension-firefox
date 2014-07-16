@@ -16,17 +16,62 @@ if ("undefined" == typeof(BrowserTrust)) {
 BrowserTrust.Storage = 
 {
 	/**
+	 * Store a fingerprint in the database under the fingerprints table
 	 * 
-	 * @param {} fingerprint
+	 * @param {Fingerprint} fingerprint to be saved
 	 */
   	storeFingerprint : function(fingerprint) 
   	{
-	  	alert(fingerprint.uri);
-		console.log("BEFORE INIT");
-		var ss = require("sdk/simple-storage");  //This doen't seem to be working
-		if(!ss.storage.Fingerprint) {
-			ss.storage.Fingerprint = { fingerprint:fingerprint };
+  		let dbConn = BrowserTrust.Storage.getConnection();
+	  	let statement = dbConn.createStatement(
+				"INSERT INTO fingerprints (uri, hash) VALUES (:uri, :hash);");
+		statement.params.uri = fingerprint.uri;
+		statement.params.hash = fingerprint.hash;
+		return !(statement.executeStep());
+  	},
+  	
+  	/**
+  	 * Obtain fingerprints from a database that are from the same uri. 
+  	 * -Note this is executed syncronusly which can cause performance issues.
+  	 * 
+  	 * @param {Fingerprint} fingerprint that needs the URI to be obtained
+  	 * @return {Array} array of fingerprints selected from the database
+  	 */
+  	getFingerprints : function(fingerprint) 
+  	{
+  		let prints = [];
+  		let dbConn = BrowserTrust.Storage.getConnection();
+  		let statement = dbConn.createStatement("SELECT * FROM fingerprints WHERE uri = :uri");
+		statement.params.uri = fingerprint.uri;
+		while (statement.executeStep()) {
+			prints.push({
+  				uri: statement.row.uri,
+  				hash: statement.row.hash
+  			});
 		}
-		console.log("AFTER INIT");
+		return prints;
+  	},
+  	
+  	/**
+  	 * Gets a connection to the sqlite Browser trust database and sets up the 
+  	 * database and fingerprint table if it has not been created already
+  	 * 
+  	 * @return {DatabaseConnection} connection the the sqlite database
+  	 */
+  	getConnection : function() 
+  	{
+  		Components.utils.import("resource://gre/modules/Services.jsm");
+		Components.utils.import("resource://gre/modules/FileUtils.jsm");
+		let file = FileUtils.getFile("ProfD", ["browsertrust.sqlite"]);
+		let dbConn =  Services.storage.openDatabase(file);
+		dbConn.executeSimpleSQL("CREATE TABLE IF NOT EXISTS fingerprints (" +
+				"uri TEXT, " +
+				"hash TEXT, " +
+				"time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
+		return dbConn;
   	}
+  	
+  	
+  	
+  	
 };
