@@ -33,6 +33,7 @@ BrowserTrust.Storage =
   	/**
   	 * Obtain fingerprints from a database that are from the same uri. 
   	 * -Note this is executed syncronusly which can cause performance issues.
+  	 *  There is a limit of 20 returned prints and order is with newest first
   	 * 
   	 * @param {Fingerprint} fingerprint that needs the URI to be obtained
   	 * @return {Array} array of fingerprints selected from the database
@@ -41,7 +42,7 @@ BrowserTrust.Storage =
   	{
   		let prints = [];
   		let dbConn = BrowserTrust.Storage.getConnection();
-  		let statement = dbConn.createStatement("SELECT * FROM fingerprints WHERE uri = :uri");
+  		let statement = dbConn.createStatement("SELECT * FROM fingerprints WHERE uri = :uri ORDER BY time DESC LIMIT 20");
 		statement.params.uri = fingerprint.uri;
 		while (statement.executeStep()) {
 			prints.push({

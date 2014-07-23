@@ -55,6 +55,23 @@ BrowserTrust.Engine =
 	},
 	
 	/**
+	 * Compares the local fingerprint history to the current
+	 * fingerprint to calculate a % of similarity
+	 * 
+	 * @returns a float 0-1 to show the percentage of similarity 
+	 */
+	compareFinderprintHtml : function()
+	{
+		let fingerprint = BrowserTrust.Engine.fingerprintHtml();
+		let history = BrowserTrust.Storage.getFingerprints(fingerprint);
+		let total = 0;
+		for (let i in history) {
+			total += history[i].hash == fingerprint.hash ? 1 : 0;
+		}
+		return total/history.length;
+	},
+	
+	/**
 	 * Breakdown the nodes and add them to a string
 	 * 
 	 * @param {Node} node to start from
