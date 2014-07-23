@@ -7,24 +7,29 @@
  * BrowserTrust namespace.
  */
 if ("undefined" == typeof(BrowserTrust)) {
-  var BrowserTrust = {};
+    var BrowserTrust = {};
 };
 
 BrowserTrust.Test = 
 {
+    btrustOutput : "",
     start : function()
     {
 		var test = "";
 		//Hello World
 		test += "1) HelloWorld Test\n " + BrowserTrust.HelloWorld.getHello() + "\n";
 		
-		//Cretae a fingerprint
+		//Create a fingerprint
 		let fingerprint = BrowserTrust.Engine.fingerprintHtml();
 		test += "2) Fingerprint Test\n URL: " + fingerprint.uri + "\n Fingerprint: " + fingerprint.hash + "\n"; 
 		
-		//Retrieve the BTrust file
-		test += "3) Get BTrust File\n " + BrowserTrust.BTrust.getBTrustFile() + "\n";
-		
+		//Retrieve the btrust.txt file
+		BrowserTrust.BTrust.getBTrustFile(function callback(response) {
+			//console.log("I response = " + response);
+			BrowserTrust.Test.btrustOutput = response;
+		}); 
+		test += "3) Get BTrust File\n ";
+		test += BrowserTrust.Test.btrustOutput.split();
 		//Store fingerprint
 		test += "4) Store Fingerprint\n Success:" + BrowserTrust.Storage.storeFingerprint(fingerprint) + "\n";
 		
