@@ -26,13 +26,17 @@ BrowserTrust.BTrust = {
             this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
         }
         request = new XMLHttpRequest();
-        request.open("GET", location, false);
-        request.overrideMimeType("text/plain");
-        request.onreadystatechange = function () {
-            if (request.readyState === 4 && request.status === 200) {
-                callback(request.responseText);
-            }
-        };
-        request.send();
+        try {
+	        request.open("GET", location, false);
+	        request.overrideMimeType("text/plain");
+	        request.onreadystatechange = function () {
+	            if (request.readyState === 4 && request.status === 200) {
+	                callback(request.responseText);
+	            }
+	        };
+	        request.send();
+        } catch(err) {
+        	
+        }
     }
 };

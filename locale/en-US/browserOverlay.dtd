@@ -1,4 +1,5 @@
 <!ENTITY browsertrust.name			        	"Browser Trust">
-<!ENTITY browsertrust.test.label          		"Test">
 <!ENTITY browsertrust.menu.accesskey    		"B">
+<!ENTITY browsertrust.test.label          		"Test">
 <!ENTITY browsertrust.test.accesskey    		"T">
+<!ENTITY browsertrust.exclude.label          	"Exclude/Include">

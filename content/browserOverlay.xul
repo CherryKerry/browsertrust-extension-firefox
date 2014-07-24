@@ -24,10 +24,13 @@
       	accesskey="&browsertrust.menu.accesskey;"
       	insertafter="helpMenu">
       <menupopup>
-        <menuitem id="browsertrust-menu-item1"
+        <menuitem id="browsertrust-menu-test"
           	label="&browsertrust.test.label;"
           	accesskey="&browsertrust.test.accesskey;"
           	oncommand="BrowserTrust.Test.start();" />
+      	<menuitem id="browsertrust-menu-exclude"
+          	label="&browsertrust.exclude.label;"
+          	oncommand="BrowserTrust.Test.excludeOrIncludeHtml();" />
       </menupopup>
     </menu>
   </menubar>

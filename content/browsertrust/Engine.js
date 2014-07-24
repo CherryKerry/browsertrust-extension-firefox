@@ -55,6 +55,29 @@ BrowserTrust.Engine =
 	},
 	
 	/**
+	 * Compare fingerprints locally for a given fingerprint. If the fingerprint 
+	 * should be excluded, the result is 1
+	 * 
+	 * @param {Fingerprint} fingerprint to compare
+	 * @return {float} the percentage of similatiry in the last 20 fingerprints
+	 */
+	compareFingerprint : function(fingerprint) 
+	{
+		//Case if the page is to be excluded, return 1
+		let excluded = BrowserTrust.Storage.isUriExcluded(fingerprint.uri);
+		if (excluded) {
+			return 1;
+		}
+		//Case look through history
+		let history = BrowserTrust.Storage.getFingerprints(fingerprint);
+		let total = 0;
+		for (let i in history) {
+			total += history[i].hash == fingerprint.hash ? 1 : 0;
+		}
+		return total/history.length;
+	},
+	
+	/**
 	 * Compares the local fingerprint history to the current
 	 * fingerprint to calculate a % of similarity
 	 * 
@@ -63,12 +86,8 @@ BrowserTrust.Engine =
 	compareFinderprintHtml : function()
 	{
 		let fingerprint = BrowserTrust.Engine.fingerprintHtml();
-		let history = BrowserTrust.Storage.getFingerprints(fingerprint);
-		let total = 0;
-		for (let i in history) {
-			total += history[i].hash == fingerprint.hash ? 1 : 0;
-		}
-		return total/history.length;
+		let result = BrowserTrust.Engine.compareFingerprint(fingerprint);
+		return result;
 	},
 	
 	/**

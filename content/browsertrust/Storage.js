@@ -12,6 +12,9 @@ if ("undefined" == typeof(BrowserTrust)) {
 
 /**
  * User Story 22: Stores a fingerprint and URL locally.
+ * 
+ * Documentation od SQLite in mozilla can be found here:
+ * https://developer.mozilla.org/en-US/docs/Storage
  */
 BrowserTrust.Storage = 
 {
@@ -27,7 +30,14 @@ BrowserTrust.Storage =
 				"INSERT INTO fingerprints (uri, hash) VALUES (:uri, :hash);");
 		statement.params.uri = fingerprint.uri;
 		statement.params.hash = fingerprint.hash;
-		return !(statement.executeStep());
+		try {
+			statement.execute();
+			return true;
+		} catch(err) {
+			return false;
+		} finally {
+			dbConn.close();
+		}
   	},
   	
   	/**
@@ -44,14 +54,84 @@ BrowserTrust.Storage =
   		let dbConn = BrowserTrust.Storage.getConnection();
   		let statement = dbConn.createStatement("SELECT * FROM fingerprints WHERE uri = :uri ORDER BY time DESC LIMIT 20");
 		statement.params.uri = fingerprint.uri;
-		while (statement.executeStep()) {
-			prints.push({
-  				uri: statement.row.uri,
-  				hash: statement.row.hash
-  			});
+		try {
+			while (statement.executeStep()) {
+				prints.push({
+	  				uri: statement.row.uri,
+	  				hash: statement.row.hash
+	  			});
+			}
+		} catch(err) {
+		} finally {
+			dbConn.close();
+			return prints;
 		}
-		return prints;
   	},
+  	
+  	/**
+  	 * Add a URI to the exclusion table
+  	 * 
+  	 * @param {String} uri to be added
+  	 * @return {Boolean} true if URI was added, false if it was not
+  	 */
+  	excludeUri : function(uri)
+  	{
+  		let dbConn = BrowserTrust.Storage.getConnection();
+  		let statement = dbConn.createStatement(
+  				"INSERT INTO exclude (uri) VALUES (:uri);");
+		statement.params.uri = uri;
+		try {
+			statement.execute();
+			return true;
+		} catch(err) {
+			return false;
+		} finally {
+			dbConn.close();
+		}
+  	},
+  	
+  	/**
+  	 * Removes a URI from the exclusion table
+  	 * 
+  	 * @param {String} uri to be removed
+  	 * @return {Boolean} true if was removed, false it it wasn't
+  	 */
+	includeUri : function(uri)
+	{
+		let dbConn = BrowserTrust.Storage.getConnection();
+  		let statement = dbConn.createStatement(
+  				"DELETE FROM exclude WHERE uri=:uri;");
+		statement.params.uri = uri;
+		try {
+			statement.execute();
+			return true;
+		} catch(err) {
+			return false;
+		} finally {
+			dbConn.close();
+		}
+	},
+	
+	/**
+	 * Checks if a URI is in the exclusion table
+	 * 
+	 * @param {String} uri to check is in the table
+	 * @return {Boolean} true if it is in the table, false if it isn't
+	 */
+	isUriExcluded : function(uri)
+	{
+		let dbConn = BrowserTrust.Storage.getConnection();
+  		let statement = dbConn.createStatement(
+  				"SELECT uri FROM exclude WHERE uri=:uri;");
+		statement.params.uri = uri;
+		try {
+			return statement.executeStep();
+		} catch(err) {
+			return false;
+		} finally {
+			dbConn.close();
+		}
+	},
   	
   	/**
   	 * Gets a connection to the sqlite Browser trust database and sets up the 
@@ -65,9 +145,14 @@ BrowserTrust.Storage =
 		Components.utils.import("resource://gre/modules/FileUtils.jsm");
 		let file = FileUtils.getFile("ProfD", ["browsertrust.sqlite"]);
 		let dbConn =  Services.storage.openDatabase(file);
+		//Create a table to store the fingerprints
 		dbConn.executeSimpleSQL("CREATE TABLE IF NOT EXISTS fingerprints (" +
 				"uri TEXT, " +
 				"hash TEXT, " +
+				"time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
+		//Create the table to hold what pages the user wants to exclude
+		dbConn.executeSimpleSQL("CREATE TABLE IF NOT EXISTS exclude (" +
+				"uri TEXT PRIMARY KEY, " +
 				"time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
 		return dbConn;
   	}
