@@ -1,6 +1,6 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /*  			Browser Trust Fingerprint Engine | (c) Browser Trust 2014					      */
-/*										Version 1.0												  */
+/*										Version 1.1												  */
 /* 							this version has not been tested 									  */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
