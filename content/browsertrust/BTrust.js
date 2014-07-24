@@ -9,24 +9,21 @@ if (BrowserTrust === "undefined") {
     var BrowserTrust = {};
 }
 
-/**
- * Calls the getBtrust function to get the .txt file from the server, then output something to show successful retrieval
- * Currently requires btrust.txt under root directory on webserver set up locally. CTRL+SHIFT+J to open console in FF
- */
 BrowserTrust.BTrust = {
-    handleResponse : function (response) {
-        return response;
-    },
-    getBTrustFile : function (callback) {
-        var request, location;
-        location = window.content.location.protocol + window.content.location.hostname + "/btrust.txt";
-        //from http://stackoverflow.com/questions/19534908/firefox-extension-addon-reading-a-text-file-from-remote-serverurl
+    /**
+     * Method getFile makes a (currently) synchronous AJAX request to a uri provided to fetch the btrust.txt file that contains a list of 
+     * static content. The data returned then can be accessed via the callback function provided as an argument.
+     * @param {String} uri The uri that points to the btrust.txt file
+     * @param {Function} callback The callback function mentioned above.
+     */
+    getFile : function (uri, callback) {
+        var request;
         // Add XMLHttpRequest constructor, if not already present
         if (!('XMLHttpRequest' in this)) {
             this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
         }
         request = new XMLHttpRequest();
-        request.open("GET", location, false);
+        request.open("GET", uri, false);
         request.overrideMimeType("text/plain");
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
@@ -34,5 +31,13 @@ BrowserTrust.BTrust = {
             }
         };
         request.send();
+    },
+    /**
+     * Method to get btrust.txt from the server of the current webpage. 
+     * @param {function} callback used to do something with the data returned from AJAX request
+     */
+    getBTrustFile : function (callback) {
+        var location = window.content.location.protocol + window.content.location.hostname + "/btrust.txt";
+        BrowserTrust.BTrust.getFile(location, callback);
     }
 };

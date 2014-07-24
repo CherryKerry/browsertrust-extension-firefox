@@ -25,9 +25,8 @@ BrowserTrust.Test =
 		
 		//Retrieve the btrust.txt file
 		BrowserTrust.BTrust.getBTrustFile(function callback(response) {
-			//console.log("I response = " + response);
 			BrowserTrust.Test.btrustOutput = response;
-		}); 
+		});
 		test += "3) Get BTrust File\n ";
 		test += BrowserTrust.Test.btrustOutput.split();
 		
