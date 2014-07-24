@@ -63,12 +63,12 @@ BrowserTrust.Test =
 	excludeOrIncludeHtml : function()
 	{
 		let fingerprint = BrowserTrust.Engine.fingerprintHtml();
-		let exclude = BrowserTrust.Storage.excludeUri(fingerprint.uri);
+		let exclude = BrowserTrust.Storage.setUriAsDynamic(fingerprint.uri);
 		if (exclude) {
-			alert("'" + fingerprint.uri + "' has been excluded");
+			alert("'" + fingerprint.uri + "' has been set as dynamic");
 		} else {
-			BrowserTrust.Storage.includeUri(fingerprint.uri);
-			alert("'" + fingerprint.uri + "' has been included");
+			BrowserTrust.Storage.setUriAsStatic(fingerprint.uri);
+			alert("'" + fingerprint.uri + "' has been set as static");
 		}
 	}
 };

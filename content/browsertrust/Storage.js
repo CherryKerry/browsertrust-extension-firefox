@@ -74,11 +74,11 @@ BrowserTrust.Storage =
   	 * @param {String} uri to be added
   	 * @return {Boolean} true if URI was added, false if it was not
   	 */
-  	excludeUri : function(uri)
+  	setUriAsDynamic : function(uri)
   	{
   		let dbConn = BrowserTrust.Storage.getConnection();
   		let statement = dbConn.createStatement(
-  				"INSERT INTO exclude (uri) VALUES (:uri);");
+  				"INSERT INTO dynamic_sites (uri) VALUES (:uri);");
 		statement.params.uri = uri;
 		try {
 			statement.execute();
@@ -96,11 +96,11 @@ BrowserTrust.Storage =
   	 * @param {String} uri to be removed
   	 * @return {Boolean} true if was removed, false it it wasn't
   	 */
-	includeUri : function(uri)
+	setUriAsStatic : function(uri)
 	{
 		let dbConn = BrowserTrust.Storage.getConnection();
   		let statement = dbConn.createStatement(
-  				"DELETE FROM exclude WHERE uri=:uri;");
+  				"DELETE FROM dynamic_sites WHERE uri=:uri;");
 		statement.params.uri = uri;
 		try {
 			statement.execute();
@@ -118,11 +118,11 @@ BrowserTrust.Storage =
 	 * @param {String} uri to check is in the table
 	 * @return {Boolean} true if it is in the table, false if it isn't
 	 */
-	isUriExcluded : function(uri)
+	isUriDynamic : function(uri)
 	{
 		let dbConn = BrowserTrust.Storage.getConnection();
   		let statement = dbConn.createStatement(
-  				"SELECT uri FROM exclude WHERE uri=:uri;");
+  				"SELECT uri FROM dynamic_sites WHERE uri=:uri;");
 		statement.params.uri = uri;
 		try {
 			return statement.executeStep();
@@ -151,7 +151,7 @@ BrowserTrust.Storage =
 				"hash TEXT, " +
 				"time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
 		//Create the table to hold what pages the user wants to exclude
-		dbConn.executeSimpleSQL("CREATE TABLE IF NOT EXISTS exclude (" +
+		dbConn.executeSimpleSQL("CREATE TABLE IF NOT EXISTS dynamic_sites (" +
 				"uri TEXT PRIMARY KEY, " +
 				"time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
 		return dbConn;

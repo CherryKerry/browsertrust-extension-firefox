@@ -2,4 +2,4 @@
 <!ENTITY browsertrust.menu.accesskey    		"B">
 <!ENTITY browsertrust.test.label          		"Test">
 <!ENTITY browsertrust.test.accesskey    		"T">
-<!ENTITY browsertrust.exclude.label          	"Exclude/Include">
+<!ENTITY browsertrust.exclude.label          	"Set as Dynamic/Static">

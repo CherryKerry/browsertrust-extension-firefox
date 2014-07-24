@@ -64,17 +64,17 @@ BrowserTrust.Engine =
 	compareFingerprint : function(fingerprint) 
 	{
 		//Case if the page is to be excluded, return 1
-		let excluded = BrowserTrust.Storage.isUriExcluded(fingerprint.uri);
+		let excluded = BrowserTrust.Storage.isUriDynamic(fingerprint.uri);
 		if (excluded) {
 			return 1;
 		}
 		//Case look through history
 		let history = BrowserTrust.Storage.getFingerprints(fingerprint);
-		let total = 0;
+		let matching = 0;
 		for (let i in history) {
-			total += history[i].hash == fingerprint.hash ? 1 : 0;
+			matching += history[i].hash == fingerprint.hash ? 1 : 0;
 		}
-		return total/history.length;
+		return matching/history.length;
 	},
 	
 	/**
