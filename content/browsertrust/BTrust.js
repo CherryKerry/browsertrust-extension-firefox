@@ -18,14 +18,14 @@ BrowserTrust.BTrust = {
      * @param {Function} callback The callback function mentioned above.
      */
     getFile : function (uri, callback) {
-        var request;
+        let request;
         // Add XMLHttpRequest constructor, if not already present
         if (!('XMLHttpRequest' in this)) {
             this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
         }
         request = new XMLHttpRequest();
         try {
-	        request.open("GET", location, false);
+	        request.open("GET", uri, false);
 	        request.overrideMimeType("text/plain");
 	        request.onreadystatechange = function () {
 	            if (request.readyState === 4 && request.status === 200) {
@@ -43,7 +43,7 @@ BrowserTrust.BTrust = {
      * @param {function} callback used to do something with the data returned from AJAX request
      */
     getBTrustFile : function (callback) {
-        var location = window.content.location.protocol + window.content.location.hostname + "/btrust.txt";
+        let location = window.content.location.protocol + window.content.location.hostname + "/btrust.txt";
         BrowserTrust.BTrust.getFile(location, callback);
     }
 };

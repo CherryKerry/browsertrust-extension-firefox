@@ -31,7 +31,7 @@ BrowserTrust.Test =
 				BrowserTrust.Test.btrustOutput = response;
 			});
 			test += "3) Get BTrust File\n ";
-			test += BrowserTrust.Test.btrustOutput.split();
+			test += BrowserTrust.Test.btrustOutput.split() + "\n";
 			
 			//Store fingerprint
 			test += "4) Store Fingerprint\n Success:" + BrowserTrust.Storage.storeFingerprint(fingerprint) + "\n";
