@@ -141,5 +141,33 @@ BrowserTrust.Engine =
 		}
 		
 		return !shouldIgnore;
+	},
+	
+	/**
+	 * Fingerprints the current page on load and compares it to the history
+	 * 
+	 * @param {} event
+	 */
+	listener : function(event) 
+	{
+		let fingerprint = BrowserTrust.Engine.fingerprintHtml();
+		let debugMessage = "Web page has been set as dynamic";
+		if (!BrowserTrust.Storage.isUriDynamic(fingerprint.uri))
+		{
+			let result = BrowserTrust.Engine.compareFinderprintHtml();
+			debugMessage = "Fingerprint for " + fingerprint.uri + " has a " + 
+					result*100 + "% similarity copmared to fingerprint history"
+		}
+		BrowserTrust.Storage.storeFingerprint(fingerprint);
+		BrowserTrust.Test.debug(debugMessage);    
 	}
+	
 };
+
+/**
+ * Adding the event listener for when the browser is ready to present the page to the user.
+ * 
+ * NOTE: This needs to be defined after the method has been defined otherwise it will 
+ * load a blank function
+ */
+window.addEventListener('DOMContentLoaded', BrowserTrust.Engine.listener, false);

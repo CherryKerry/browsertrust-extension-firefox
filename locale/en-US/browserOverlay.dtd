@@ -3,3 +3,4 @@
 <!ENTITY browsertrust.test.label          		"Test">
 <!ENTITY browsertrust.test.accesskey    		"T">
 <!ENTITY browsertrust.exclude.label          	"Set as Dynamic/Static">
+<!ENTITY browsertrust.debugging.label          	"Toggle Debugging">

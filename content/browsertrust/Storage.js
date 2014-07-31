@@ -122,7 +122,7 @@ BrowserTrust.Storage =
 	{
 		let dbConn = BrowserTrust.Storage.getConnection();
   		let statement = dbConn.createStatement(
-  				"SELECT uri FROM dynamic_sites WHERE uri=:uri;");
+  				"SELECT DISTINCT uri FROM dynamic_sites WHERE uri=:uri;");
 		statement.params.uri = uri;
 		try {
 			return statement.executeStep();
