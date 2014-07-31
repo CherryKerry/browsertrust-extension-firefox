@@ -1,0 +1,48 @@
+User Story 30
+
+1. Create a text file called “btrust.txt” in the root web directory, so that it can be accessed similarly to robots.txt. E.g. www.example.com/btrust.txt.
+
+2. This btrust.txt file should contain a list of resource URLs of static content web resources that can be accessed, with each URL separated by a newline. For example the content of the file may be as below:
+
+https://www.example.com/images/flower.jpg
+https://www.example.com/btrust.txt
+https://www.example.com/robots.txt
+https://www.example.com/scripts/somescript.js
+https://www.example.com/index.html
+
+3. The file should not have any trailing newline character after the final resource URL and does not currently allow for comments or other information to be inserted. The full path should be used, i.e. “www.example.com/index.html” is acceptable, but “/index.html” will not currently work.
+
+Supported:
+Full URI (as specified above)
+
+Not currently supported:
+* Allow for comments (lines starting with a "#")
+
+* Allow for full paths without the domain (many sites are using server farms
+  or alternative domains (e. g. m.mycompany.co.nz for mobile sites), so the
+  host portion may change. Similarly a site may be served using HTTP and
+  HTTPS.
+
+* Use of regular expressions in URIs, may need prefixing, e. g.
+
+  Path http://adverts.myhost.co.nz/ads/viagra.gif
+  Path /images/CompanyLogo.png
+  Regex http://www\.myhost\.co\.nz/
+images/static.*
+  Regex /documents/.*?\.pdf
+
+
+4. The web admin must determine what content is static and therefore what should go in the file. The site admin can do this manually (No known script exists to do this automatically at time of writing). Any resource that doesn’t change, for example a .jpg image file typically would not change, should go in the file.
+
+5. More examples of possible static content: 
+https://www.example.com/image.jpg
+https://www.example.com/script.js
+https://www.example.com/some_static_webpage.html
+https://www.example.com/another_static_webpage.html
+https://www.example.com/pretty_style.css
+https://www.example.com/image.png
+https://www.example.com/favicon/favicon.ico
+https://www.example.com/image.gif
+
+6. Although the above examples are often static, it is possible a script on the server, e.g. script.php may dynamically alter the resource content before it is sent to the user, so the web admin must account for this when deciding which resource URLs to include. If in doubt, the URLs could be included and testing can be done by accessing the website multiple times to see if any warnings are issued by the browser extension component. 
+
