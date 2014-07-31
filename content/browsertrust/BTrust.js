@@ -25,14 +25,14 @@ BrowserTrust.BTrust = {
         }
         request = new XMLHttpRequest();
         try {
-	        request.open("GET", uri, false);
-	        request.overrideMimeType("text/plain");
-	        request.onreadystatechange = function () {
-	            if (request.readyState === 4 && request.status === 200) {
-	                callback(request.responseText);
-	            }
-	        };
-	        request.send();
+            request.open("GET", uri, false);
+            request.overrideMimeType("text/plain");
+            request.onreadystatechange = function () {
+                if (request.readyState === 4 && request.status === 200) {
+                    callback(request.responseText);
+                }
+            };
+            request.send();
         } catch(err) {
         	
         }
