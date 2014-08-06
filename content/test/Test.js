@@ -54,6 +54,12 @@ BrowserTrust.Test =
 			test += "7) Is current page dynamic?\n";
 			test += BrowserTrust.Storage.isUriDynamic(fingerprint.uri) + "\n"
 			
+			//Is URI Considered static or dynamic according to whitelist
+			test += "8) Is http://www.google.co.nz/jquery.js static?\n";
+			test += BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/jquery.js") + "\n";
+			test += "9) Is http://www.google.co.nz/somepage.php static?\n";
+			test += BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/somepage.php") + "\n";
+			
 		} catch (err) {
 			test += "\nERROR:\n\n" + err;
 		}
