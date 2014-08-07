@@ -59,6 +59,7 @@ BrowserTrust.Test =
 			test += BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/jquery.js") + "\n";
 			test += "9) Is http://www.google.co.nz/somepage.php static?\n";
 			test += BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/somepage.php") + "\n";
+			BrowserTrust.StaticContent.observeLoadedContent();
 			
 		} catch (err) {
 			test += "\nERROR:\n\n" + err;
