@@ -1,5 +1,5 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/*  				Browser Trust Server Listers | (c) Browser Trust 2014					      */
+/*  				Browser Trust Browser Listers | (c) Browser Trust 2014					      */
 /*										Version 1.0												  */
 /* 							this version has not been tested 									  */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
@@ -11,7 +11,7 @@ if ("undefined" == typeof(BrowserTrust)) {
   var BrowserTrust = {};
 };
 
-//Global utilitt methods and Firefox services
+//Global utility methods and Firefox services
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 var observerService = CCSE("@mozilla.org/observer-service;1", "nsIObserverService");
@@ -32,7 +32,27 @@ BrowserTrust.Listeners =
 	 * An array of TracingListeres attached to HTTP request
 	 * @type Array
 	 */
-	tracers : []
+	tracers : [],
+	
+	/**
+	 * An EventListener for triggering the fingerprint engine, the listener
+	 * can be added to the Window Events Listeners for set JS Events
+	 * 
+	 * @param {} event
+	 */
+	eventListener : function(event) 
+	{
+		let fingerprint = BrowserTrust.Engine.fingerprintHtml();
+		let debugMessage = "Web page has been set locally as dynamic";
+		if (!BrowserTrust.Storage.isUriDynamic(fingerprint.uri))
+		{
+			let result = BrowserTrust.Engine.compareFinderprintHtml();
+			debugMessage = "Fingerprint for " + fingerprint.uri + " has a " + 
+					result*100 + "% similarity copmared to fingerprint history"
+		}
+		BrowserTrust.Storage.storeFingerprint(fingerprint);
+		BrowserTrust.Test.debug(debugMessage);
+	}
 }
 
 /**
@@ -46,9 +66,10 @@ var httpObserver =
     {
         if (topic == "http-on-modify-request") {
         	//Setup Http Channel used in the Tracer
-        	var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
+        	subject.QueryInterface(Ci.nsIHttpChannel);
         	//Create tracer and add to tracer array
 	        var newListener = new TracingListener();
+	        newListener.request = subject;
 	        BrowserTrust.Listeners.tracers.push(newListener);
 	        //Attach tracing listener to request
 	        subject.QueryInterface(Ci.nsITraceableChannel);
@@ -69,6 +90,7 @@ var httpObserver =
 
 //Add the Http Observer to the firefox observer service 
 observerService.addObserver(httpObserver, "http-on-modify-request", false);
+window.addEventListener('DOMContentLoaded', BrowserTrust.Engine.listener, false);
 
 /**
  * TracingListener Class that intercepts http responces, reads them and adds the data
@@ -102,6 +124,7 @@ function TracingListener()
 
         //Read data from inputStream
         var data = binaryInputStream.readBytes(count);
+        BrowserTrust.Test.debug("Response data: " + data);
 		
         //Add data to listeners data array
         this.receivedData.push(data);

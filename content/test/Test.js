@@ -17,56 +17,56 @@ BrowserTrust.Test =
     
     start : function()
     {
-		var test = "";
+		var debug = BrowserTrust.Test.debugAlertIsOn;
+		BrowserTrust.Test.debugAlertIsOn = true;
 		
 		try {
 			//Hello World
-			test += "1) HelloWorld Test\n " + BrowserTrust.HelloWorld.getHello() + "\n";
+			BrowserTrust.Test.debug("1) HelloWorld Test\n " + BrowserTrust.HelloWorld.getHello());
 		
 			//Create a fingerprint
 			let fingerprint = BrowserTrust.Engine.fingerprintHtml();
-			test += "2) Fingerprint Test\n URL: " + fingerprint.uri + "\n Fingerprint: " + fingerprint.hash + "\n"; 
+			BrowserTrust.Test.debug("2) Fingerprint Test\n URL: " + fingerprint.uri + "\n Fingerprint: " + fingerprint.hash); 
 			
 			//Retrieve the btrust.txt file
 			BrowserTrust.BTrust.getBTrustFile(function callback(response) {
 				BrowserTrust.Test.btrustOutput = response;
 			});
-			test += "3) Get BTrust File\n ";
-			test += BrowserTrust.Test.btrustOutput.split() + "\n";
+			BrowserTrust.Test.debug("3) Get BTrust File");
+			BrowserTrust.Test.debug(BrowserTrust.Test.btrustOutput.split());
 			
 			//Store fingerprint
-			test += "4) Store Fingerprint\n Success:" + BrowserTrust.Storage.storeFingerprint(fingerprint) + "\n";
+			BrowserTrust.Test.debug("4) Store Fingerprint\n Success:" + BrowserTrust.Storage.storeFingerprint(fingerprint));
 			
 			//Retrieve fingerprints from database
 			let prints = BrowserTrust.Storage.getFingerprints(fingerprint);
-			test += "5) Get last 5 Fingerprints Test\n";
+			BrowserTrust.Test.debug("5) Get last 5 Fingerprints Test");
 			for (let i in prints) 
 			{
 				if (i <=  5) //Only print the last 5 values
-					test += i + ":" + prints[i].hash + "\n";
+					BrowserTrust.Test.debug(i + ":" + prints[i].hash);
 			}
 			
 			//Test current page comparison
-			test += "6) Compare current page\n";
-			test += BrowserTrust.Engine.compareFinderprintHtml()*100 + "% Similarity\n";
+			BrowserTrust.Test.debug("6) Compare current page");
+			BrowserTrust.Test.debug(BrowserTrust.Engine.compareFinderprintHtml()*100 + "% Similarity\n");
 			
 			//Is URI static or dynamic as per local storage
-			test += "7) Is current page dynamic?\n";
-			test += BrowserTrust.Storage.isUriDynamic(fingerprint.uri) + "\n"
+			BrowserTrust.Test.debug("7) Is current page dynamic?");
+			BrowserTrust.Test.debug(BrowserTrust.Storage.isUriDynamic(fingerprint.uri))
 			
 			//Is URI Considered static or dynamic according to whitelist
-			test += "8) Is http://www.google.co.nz/jquery.js static?\n";
-			test += BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/jquery.js") + "\n";
-			test += "9) Is http://www.google.co.nz/somepage.php static?\n";
-			test += BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/somepage.php") + "\n";
+			BrowserTrust.Test.debug("8) Is http://www.google.co.nz/jquery.js static?");
+			BrowserTrust.Test.debug(BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/jquery.js"));
+			BrowserTrust.Test.debug("9) Is http://www.google.co.nz/somepage.php static?");
+			BrowserTrust.Test.debug(BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/somepage.php"));
 			BrowserTrust.StaticContent.observeLoadedContent();
 			
 		} catch (err) {
-			test += "\nERROR:\n\n" + err;
+			BrowserTrust.Test.debug("\nERROR:\n\n" + err);
 		}
 		
-		//Display test results
-		BrowserTrust.Test.debug(test);
+		BrowserTrust.Test.debugAlertIsOn = debug;
 	},
 	
 	/**
@@ -104,10 +104,10 @@ BrowserTrust.Test =
 	 */
 	debug : function(message)
 	{
-		console.log(message);
 		if (BrowserTrust.Test.debugAlertIsOn)
 		{
-			alert(message);
+			console.log(message);
+			//alert(message);
 		}
 	}
 };
