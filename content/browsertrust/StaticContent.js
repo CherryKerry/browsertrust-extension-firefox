@@ -82,7 +82,7 @@ BrowserTrust.StaticContent = {
 					}
 					if(tempOutput !== "" && count == 3)
 					{
-						window.alert(hostURL + contentURL + " is static? " + BrowserTrust.StaticContent.isContentStatic(hostURL + contentURL));
+						BrowserTrust.Test.debug(hostURL + contentURL + " is static? " + BrowserTrust.StaticContent.isContentStatic(hostURL + contentURL));
 					}
 					break;
 				}
