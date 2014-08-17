@@ -14,6 +14,7 @@
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/Listeners.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/BTrust.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/Storage.js" />
+  <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/Settings.js" />
   <script type="application/x-javascript" src="chrome://xulschoolhello/content/browsertrust/StaticContent.js" />
   
   <stringbundleset id="stringbundleset">
@@ -36,6 +37,9 @@
       	<menuitem id="browsertrust-menu-exclude"
           	label="&browsertrust.exclude.label;"
           	oncommand="BrowserTrust.Test.excludeOrIncludeHtml();" />
+      	<menuitem id="browsertrust-menu-settings"
+            label="&browsertrust.settings.label;"
+            oncommand="BrowserTrust.Settings.openPreferences();" />
       </menupopup>
     </menu>
   </menubar>

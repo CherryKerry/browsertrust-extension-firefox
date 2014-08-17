@@ -62,6 +62,10 @@ BrowserTrust.Test =
 			BrowserTrust.Test.debug(BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/somepage.php"));
 			BrowserTrust.StaticContent.observeLoadedContent();
 			
+			//Open Preferences/Options menu from toolbar button
+			BrowserTrust.Test.debug("10) Does the preferences menu open?");
+			BrowserTrust.Settings.openPreferences();
+			
 		} catch (err) {
 			BrowserTrust.Test.debug("\nERROR:\n\n" + err);
 		}
