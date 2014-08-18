@@ -1,11 +1,27 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet type="text/css" href="chrome://browser/skin/preferences/preferences.css" ?>
-<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <prefpane id="fingerprintServerSettings" label="Fingerprint Server Settings">
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="BrowserTrust Preferences" id="prefWindow1">
+  <prefpane id="settings" label="Settings">
+    <!-- The preferences descriptions, which specify the set of preferences that will be modified, -->
     <preferences>
       <preference id="pref-fingerprintServer" name="extensions.browsertrust.fingerprintServer" type="string" />
+      <preference id="pref-trustLevel" name="extensions.browsertrust.trust.level" type="string" />
     </preferences>
-    <textbox label="Finger Print Server:" preference="pref-fingerprintServer"/>
+    <!-- the user interface for adjusting those preferences -->
+    <vbox>
+      <label value="Finger Print Server:"/>
+      <textbox preference="pref-fingerprintServer"/>
+    </vbox>
+    <vbox>
+      <groupbox flex="1">
+      	<caption label="Trust Level"/>
+        <radiogroup>
+          <radio preference="pref-trustLevel" label="High" value="high" selected="true"/>
+          <radio preference="pref-trustLevel" label="Medium" value="medium"/>
+          <radio preference="pref-trustLevel" label="Low" value="low"/>
+        </radiogroup>
+      </groupbox>
+    </vbox>
   </prefpane>
 </prefwindow>
