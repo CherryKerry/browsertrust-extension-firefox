@@ -39,6 +39,7 @@
           	oncommand="BrowserTrust.Test.excludeOrIncludeHtml();" />
       	<menuitem id="browsertrust-menu-settings"
             label="&browsertrust.settings.label;"
+            accesskey="&browsertrust.settings.accesskey;"
             oncommand="BrowserTrust.Settings.openPreferences();" />
       </menupopup>
     </menu>
