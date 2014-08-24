@@ -1,1 +1,25 @@
+#custom-button-1
+  {list-style-image: url("chrome://browsertrust/content/button-2s.png");}
 
+/* common style for all custom buttons - modern */
+#nav-bar .custombutton
+  {-moz-image-region: rect( 0px  41px 39px  0px);}
+#nav-bar .custombutton:hover
+  {-moz-image-region: rect( 0px  83px 39px 42px);}
+#nav-bar .custombutton:active
+  {-moz-image-region: rect( 0px 125px 39px 84px);}
+
+.custombutton
+  {-moz-image-region: rect(39px  49px 72px  0px);}
+.custombutton:hover
+  {-moz-image-region: rect(39px  98px 72px 49px);}
+.custombutton:active
+  {-moz-image-region: rect(39px 147px 72px 98px);}
+
+/* common style for all custom buttons - classic */
+.custombutton            
+  {-moz-image-region: rect( 0px 145px 20px 126px);}
+.custombutton:hover
+  {-moz-image-region: rect( 0px 164px 20px 145px);}
+.custombutton:active
+  {-moz-image-region: rect( 0px 183px 20px 164px);}

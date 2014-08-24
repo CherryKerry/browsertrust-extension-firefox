@@ -42,16 +42,7 @@ BrowserTrust.Listeners =
 	 */
 	eventListener : function(event) 
 	{
-		let fingerprint = BrowserTrust.Engine.fingerprintHtml();
-		let debugMessage = "Web page has been set locally as dynamic";
-		if (!BrowserTrust.Storage.isUriDynamic(fingerprint.uri))
-		{
-			let result = BrowserTrust.Engine.compareFinderprintHtml();
-			debugMessage = "Fingerprint for " + fingerprint.uri + " has a " + 
-					result*100 + "% similarity copmared to fingerprint history"
-		}
-		BrowserTrust.Storage.storeFingerprint(fingerprint);
-		BrowserTrust.Test.debug(debugMessage);
+		BrowserTrust.Engine.processListenerTracers();
 	}
 }
 
@@ -90,7 +81,7 @@ var httpObserver =
 
 //Add the Http Observer to the firefox observer service 
 observerService.addObserver(httpObserver, "http-on-modify-request", false);
-window.addEventListener('DOMContentLoaded', BrowserTrust.Engine.listener, false);
+window.addEventListener('DOMContentLoaded', BrowserTrust.Listeners.eventListener, false);
 
 /**
  * TracingListener Class that intercepts http responces, reads them and adds the data
@@ -210,7 +201,7 @@ function TracingListener()
     	var data = "";
     	for (var i in this.receivedData)
     	{
-    		data += this.recievedData[i];
+    		data += this.receivedData[i];
     	}
     	return data;
     }

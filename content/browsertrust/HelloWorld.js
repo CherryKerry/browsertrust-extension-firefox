@@ -25,7 +25,7 @@ BrowserTrust.HelloWorld =
 	 */
 	getHello : function()
 	{
-		var stringBundle = document.getElementById("xulschoolhello-string-bundle");
+		var stringBundle = document.getElementById("browsertrust-string-bundle");
 	    return stringBundle.getString("browsertrust.greeting.label");
 	}
 };

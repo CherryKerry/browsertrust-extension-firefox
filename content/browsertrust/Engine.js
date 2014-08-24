@@ -13,6 +13,8 @@ if ("undefined" == typeof(BrowserTrust)) {
 
 BrowserTrust.Engine = 
 {
+	processedFingerprints : [],
+	
 	/**
 	 * Method that creates a fingerprint object given a uri and string data to fingerprint
 	 * 
@@ -23,7 +25,8 @@ BrowserTrust.Engine =
 	fingerprint : function(uri, data) {
 		var fingerprint = {
 			hash:Sha256.hash(data, false),
-			uri	:uri
+			uri	:uri,
+			result : 0
 		};
 		return fingerprint;
 	},
@@ -91,6 +94,22 @@ BrowserTrust.Engine =
 	},
 	
 	/**
+	 * Generates a fingerprint from the input then checks that against the data
+	 * stored to determine the fingerprints similarity with others
+	 * 
+	 * @param {String} uri of the data
+	 * @param {String} data the string of data to be fingerprinted
+	 * @return {fingerprint} the resulting fingerprint
+	 */
+	fingerprintAndCompare : function(uri, data) 
+	{
+		let fingerprint = BrowserTrust.Engine.fingerprint(uri, data);
+		let result = BrowserTrust.Engine.compareFingerprint(fingerprint);
+		fingerprint.result = result;
+		return fingerprint;
+	},
+	
+	/**
 	 * Breakdown the nodes and add them to a string
 	 * 
 	 * @param {Node} node to start from
@@ -141,5 +160,19 @@ BrowserTrust.Engine =
 		}
 		
 		return !shouldIgnore;
+	},
+	
+	/**
+	 * Process the listeners data from the tracers array
+	 */
+	processListenerTracers : function() 
+	{
+		
+		while(BrowserTrust.Listeners.tracers.length > 0)
+		{
+			var tracer = BrowserTrust.Listeners.tracers.pop();
+			var fingerprint = BrowserTrust.Engine.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
+			BrowserTrust.Engine.processedFingerprints.push(fingerprint);
+		}
 	}
 };

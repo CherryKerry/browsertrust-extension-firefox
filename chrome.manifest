@@ -1,4 +1,5 @@
-content   xulschoolhello                content/
-skin      xulschoolhello  classic/1.0   skin/
-locale    xulschoolhello  en-US         locale/en-US/
-overlay chrome://browser/content/browser.xul  chrome://xulschoolhello/content/browserOverlay.xul
+content   browsertrust                content/
+skin      browsertrust  classic/1.0   skin/
+locale    browsertrust  en-US         locale/en-US/
+overlay chrome://browser/content/browser.xul  chrome://browsertrust/content/browserOverlay.xul
+style chrome://global/content/customizeToolbar.xul chrome://browsertrust/skin/browserOverlay.css
