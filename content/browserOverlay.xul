@@ -13,6 +13,7 @@
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Listeners.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/BTrust.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Storage.js" />
+  <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Settings.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/StaticContent.js" />
   
   <stringbundleset id="stringbundleset">
@@ -48,6 +49,10 @@
       	<menuitem id="browsertrust-menu-exclude"
           	label="&browsertrust.exclude.label;"
           	oncommand="BrowserTrust.Test.excludeOrIncludeHtml();" />
+      	<menuitem id="browsertrust-menu-settings"
+            label="&browsertrust.settings.label;"
+            accesskey="&browsertrust.settings.accesskey;"
+            oncommand="BrowserTrust.Settings.openPreferences();" />
       </menupopup>
     </menu>
   </menubar>
@@ -68,7 +73,5 @@
         <!-- Content comes from firebugMenuContent -->
     </menupopup>
   </toolbarbutton>
-  
 
-  
 </overlay>

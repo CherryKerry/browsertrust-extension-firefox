@@ -62,8 +62,12 @@ BrowserTrust.Test =
 			BrowserTrust.Test.debug(BrowserTrust.StaticContent.isContentStatic("http://www.google.co.nz/somepage.php"));
 			BrowserTrust.StaticContent.observeLoadedContent();
 			
+			//Open Preferences/Options menu from toolbar button
+			BrowserTrust.Test.debug("10) Does the preferences menu open?");
+			BrowserTrust.Settings.openPreferences();
+			
 			//Ouput the urls in the data array
-			BrowserTrust.Test.debug("10) Print contents of tracers array");
+			BrowserTrust.Test.debug("11) Print contents of tracers array");
 			for (var key in BrowserTrust.Listeners.tracers) {
 				var processedFP = BrowserTrust.Engine.processedFingerprints[key];
 				BrowserTrust.Test.debug("URI:" + processedFP.uri + " hash:" + processedFP.hash + " result:" + processedFP.result);

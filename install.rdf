@@ -4,9 +4,9 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>browsertrust@aut.ac.nz</em:id>
     <em:name>Browser Trust</em:name>
-    <em:description>Welcome to XUL School!</em:description>
+    <em:description>Fingerprints a web page to determine content modification.</em:description>
     <em:version>0.1</em:version>
-    <em:creator>Appcoast</em:creator>
+    <em:creator>AUT Browser Trust Group</em:creator>
     <em:homepageURL>https://developer.mozilla.org/en/XUL_School</em:homepageURL>
     <em:type>2</em:type>
     <!-- Mozilla Firefox -->
@@ -17,5 +17,7 @@
         <em:maxVersion>30.*</em:maxVersion>
       </Description>
     </em:targetApplication>
+    <!-- Enables Preferences/Options button in add-ons menu-->
+    <em:optionsURL>chrome://browsertrust/content/preferencesWindow.xul</em:optionsURL>
   </Description>
 </RDF>

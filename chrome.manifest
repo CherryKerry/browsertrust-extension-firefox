@@ -3,3 +3,4 @@ skin      browsertrust  classic/1.0   skin/
 locale    browsertrust  en-US         locale/en-US/
 overlay chrome://browser/content/browser.xul  chrome://browsertrust/content/browserOverlay.xul
 style chrome://global/content/customizeToolbar.xul chrome://browsertrust/skin/browserOverlay.css
+overlay chrome://browser/content/browser.xul  chrome://browsertrust/content/preferencesWindow.xul
