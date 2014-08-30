@@ -121,8 +121,8 @@ BrowserTrust.Storage =
 	isUriDynamic : function(uri)
 	{
 		let dbConn = BrowserTrust.Storage.getConnection();
-  		let statement = dbConn.createStatement(
-  				"SELECT DISTINCT uri FROM dynamic_sites WHERE uri=:uri;");
+		let statement = dbConn.createStatement(
+				"SELECT DISTINCT uri FROM dynamic_sites WHERE uri=:uri;");
 		statement.params.uri = uri;
 		try {
 			return statement.executeStep();
@@ -132,16 +132,16 @@ BrowserTrust.Storage =
 			dbConn.close();
 		}
 	},
-  	
-  	/**
-  	 * Gets a connection to the sqlite Browser trust database and sets up the 
-  	 * database and fingerprint table if it has not been created already
-  	 * 
-  	 * @return {DatabaseConnection} connection the the sqlite database
-  	 */
-  	getConnection : function() 
-  	{
-  		Components.utils.import("resource://gre/modules/Services.jsm");
+	
+	/**
+	 * Gets a connection to the sqlite Browser trust database and sets up the 
+	 * database and fingerprint table if it has not been created already
+	 * 
+	 * @return {DatabaseConnection} connection the the sqlite database
+	 */
+	getConnection : function() 
+	{
+		Components.utils.import("resource://gre/modules/Services.jsm");
 		Components.utils.import("resource://gre/modules/FileUtils.jsm");
 		let file = FileUtils.getFile("ProfD", ["browsertrust.sqlite"]);
 		let dbConn =  Services.storage.openDatabase(file);
@@ -155,9 +155,9 @@ BrowserTrust.Storage =
 				"uri TEXT PRIMARY KEY, " +
 				"time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
 		return dbConn;
-  	}
-  	
-  	
-  	
-  	
+	}
+	
+	
+	
+	
 };

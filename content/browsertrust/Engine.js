@@ -9,7 +9,7 @@
  */
 if ("undefined" == typeof(BrowserTrust)) {
   var BrowserTrust = {};
-};
+}
 
 BrowserTrust.Engine = 
 {
@@ -54,7 +54,7 @@ BrowserTrust.Engine =
 	 */
 	getWindowDocument : function() 
 	{
-	    return window.content.document;
+            return window.content.document;
 	},
 	
 	/**
@@ -120,7 +120,7 @@ BrowserTrust.Engine =
 	breakDownNodes : function(node, parentName, trustFile) 
 	{
 		var result = "";
-		for (var childNode = node.firstChild; childNode != null; childNode = childNode.nextSibling)
+		for (var childNode = node.firstChild; childNode !== null; childNode = childNode.nextSibling)
 		{	
 			var nodeName = parentName + "." + childNode.tagName;
 			if (BTEngine.shouldFingerprint(nodeName, trustFile)) 
