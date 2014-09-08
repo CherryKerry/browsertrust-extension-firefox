@@ -35,6 +35,9 @@ BrowserTrust.Test =
 			BrowserTrust.Test.debug("3) Get BTrust File");
 			BrowserTrust.Test.debug(BrowserTrust.Test.btrustOutput.split());
 			
+			//Verify btrust.txt file fingerprint
+			BrowserTrust.Test.debug("3.5) Verify BTrust File\n" + BrowserTrust.BTrust.verifyBTrustFile());
+			
 			//Store fingerprint
 			BrowserTrust.Test.debug("4) Store Fingerprint\n Success:" + BrowserTrust.Storage.storeFingerprint(fingerprint));
 			
