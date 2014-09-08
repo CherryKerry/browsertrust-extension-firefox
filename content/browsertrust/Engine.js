@@ -66,15 +66,50 @@ BrowserTrust.Engine =
 	 */
 	compareFingerprint : function(fingerprint) 
 	{
+		return BrowserTrust.Engine.compareFingerprintLocal(fingerprint);
+	},
+	
+	/**
+	 * Compare fingerprints locally for a given fingerprint. If the fingerprint 
+	 * should be excluded, the result is 1
+	 * 
+	 * @param {Fingerprint} fingerprint to compare
+	 * @return {float} the percentage of similatiry in the last 20 fingerprints
+	 */
+	compareFingerprintLocal : function(fingerprint) 
+	{
 		//Case if the page is to be excluded, return 1
-		let excluded = BrowserTrust.Storage.isUriDynamic(fingerprint.uri);
+		var excluded = BrowserTrust.Storage.isUriDynamic(fingerprint.uri);
 		if (excluded) {
 			return 1;
 		}
 		//Case look through history
-		let history = BrowserTrust.Storage.getFingerprints(fingerprint);
-		let matching = 0;
-		for (let i in history) {
+		var history = BrowserTrust.Storage.getFingerprints(fingerprint);
+		var matching = 0;
+		for (var i in history) {
+			matching += history[i].hash == fingerprint.hash ? 1 : 0;
+		}
+		return matching/history.length;
+	},
+	
+	/**
+	 * Compare fingerprints locally for a given fingerprint. If the fingerprint 
+	 * should be excluded, the result is 1
+	 * 
+	 * @param {Fingerprint} fingerprint to compare
+	 * @return {float} the percentage of similatiry in the last 20 fingerprints
+	 */
+	compareFingerprintRemote : function(fingerprint) 
+	{
+		//Case if the page is to be excluded, return 1
+		var excluded = BrowserTrust.Storage.isUriDynamic(fingerprint.uri);
+		if (excluded) {
+			return 1;
+		}
+		//Case look through history
+		var json = BrowserTrust.Server.getFingerprints(fingerprint);
+		var matching = 0;
+		for (var i in history) {
 			matching += history[i].hash == fingerprint.hash ? 1 : 0;
 		}
 		return matching/history.length;
@@ -88,8 +123,8 @@ BrowserTrust.Engine =
 	 */
 	compareFinderprintHtml : function()
 	{
-		let fingerprint = BrowserTrust.Engine.fingerprintHtml();
-		let result = BrowserTrust.Engine.compareFingerprint(fingerprint);
+		var fingerprint = BrowserTrust.Engine.fingerprintHtml();
+		var result = BrowserTrust.Engine.compareFingerprint(fingerprint);
 		return result;
 	},
 	
@@ -103,9 +138,9 @@ BrowserTrust.Engine =
 	 */
 	fingerprintAndCompare : function(uri, data) 
 	{
-		let fingerprint = BrowserTrust.Engine.fingerprint(uri, data);
-		let result = BrowserTrust.Engine.compareFingerprint(fingerprint);
-		fingerprint.result = result;
+		var fingerprint = BrowserTrust.Engine.fingerprint(uri, data);
+		var localresult = BrowserTrust.Engine.compareFingerprint(fingerprint);
+		fingerprint.localresult = localresult;
 		return fingerprint;
 	},
 	
@@ -167,12 +202,12 @@ BrowserTrust.Engine =
 	 */
 	processListenerTracers : function() 
 	{
-		
 		while(BrowserTrust.Listeners.tracers.length > 0)
 		{
 			var tracer = BrowserTrust.Listeners.tracers.pop();
 			var fingerprint = BrowserTrust.Engine.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
 			BrowserTrust.Engine.processedFingerprints.push(fingerprint);
+			BrowserTrust.Storage.storeFingerprint(fingerprint);
 		}
 	}
 };

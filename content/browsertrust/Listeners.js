@@ -43,44 +43,46 @@ BrowserTrust.Listeners =
 	eventListener : function(event) 
 	{
 		BrowserTrust.Engine.processListenerTracers();
+	},
+	
+
+
+	/**
+	 * Http Observer that assigns a new TracingListener to every http request
+	 * made by firefox. The Tracer is added to the BrowserTrust Listeners tracers array
+	 * @type Observer
+	 */
+ 	httpObserver :
+	{
+	    observe: function(subject, topic, data)
+	    {
+	        if (topic == "http-on-modify-request") {
+	        	//Setup Http Channel used in the Tracer
+	        	subject.QueryInterface(Ci.nsIHttpChannel);
+	        	//Create tracer and add to tracer array
+		        var newListener = new TracingListener();
+		        newListener.request = subject;
+		        BrowserTrust.Listeners.tracers.push(newListener);
+		        //Attach tracing listener to request
+		        subject.QueryInterface(Ci.nsITraceableChannel);
+		        newListener.originalListener = subject.setNewListener(newListener);
+		    }
+	    },
+	    
+	    QueryInterface : function (aIID)
+	    {
+	        if (aIID.equals(Ci.nsIObserver) ||
+	            aIID.equals(Ci.nsISupports))
+	        {
+	            return this;
+	        }
+	        throw Components.results.NS_NOINTERFACE;
+	    }
 	}
 }
 
-/**
- * Http Observer that assigns a new TracingListener to every http request
- * made by firefox. The Tracer is added to the BrowserTrust Listeners tracers array
- * @type Observer
- */
-var httpObserver =
-{
-    observe: function(subject, topic, data)
-    {
-        if (topic == "http-on-modify-request") {
-        	//Setup Http Channel used in the Tracer
-        	subject.QueryInterface(Ci.nsIHttpChannel);
-        	//Create tracer and add to tracer array
-	        var newListener = new TracingListener();
-	        newListener.request = subject;
-	        BrowserTrust.Listeners.tracers.push(newListener);
-	        //Attach tracing listener to request
-	        subject.QueryInterface(Ci.nsITraceableChannel);
-	        newListener.originalListener = subject.setNewListener(newListener);
-	    }
-    },
-    
-    QueryInterface : function (aIID)
-    {
-        if (aIID.equals(Ci.nsIObserver) ||
-            aIID.equals(Ci.nsISupports))
-        {
-            return this;
-        }
-        throw Components.results.NS_NOINTERFACE;
-    }
-};
-
 //Add the Http Observer to the firefox observer service 
-observerService.addObserver(httpObserver, "http-on-modify-request", false);
+observerService.addObserver(BrowserTrust.Listeners.httpObserver, "http-on-modify-request", false);
 window.addEventListener('DOMContentLoaded', BrowserTrust.Listeners.eventListener, false);
 
 /**

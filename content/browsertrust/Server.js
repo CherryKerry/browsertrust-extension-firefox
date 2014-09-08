@@ -19,7 +19,7 @@ BrowserTrust.Server = {
 	 * @param {String} Calculated Hash of the URL
 	 * @return {Boolean} true if successfully submitted
 	 */
-	submitFingerPrint : function(url, hash)
+	submitFingerprint : function(url, hash)
 	{
 	    var params = "url=" + encodeURIComponent(url) + "&hash=" + encodeURIComponent(hash);
 	    request.open("POST", "http://203.86.204.34:8765/url", true);
@@ -45,7 +45,7 @@ BrowserTrust.Server = {
 	 * @param {String} URL to Submit
 	 * @return {String} JSON Response if Successful
 	 */
-	getFingerPrints : function(url)
+	getFingerprints : function(url)
 	{
 		var params = "";
 	    request.open("GET", "http://203.86.204.34:8765/url/" + url, true);

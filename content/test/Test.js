@@ -67,10 +67,10 @@ BrowserTrust.Test =
 			BrowserTrust.Settings.openPreferences();
 			
 			//Ouput the urls in the data array
-			BrowserTrust.Test.debug("11) Print contents of tracers array");
-			for (var key in BrowserTrust.Listeners.tracers) {
+			BrowserTrust.Test.debug("11) Print contents of processed array");
+			for (var key in BrowserTrust.Engine.processedFingerprints) {
 				var processedFP = BrowserTrust.Engine.processedFingerprints[key];
-				BrowserTrust.Test.debug("URI:" + processedFP.uri + " hash:" + processedFP.hash + " result:" + processedFP.result);
+				BrowserTrust.Test.debug("URL:" + processedFP.uri + " hash:" + processedFP.hash + " localresult:" + processedFP.localresult);
 			}
 			
 		} catch (err) {
