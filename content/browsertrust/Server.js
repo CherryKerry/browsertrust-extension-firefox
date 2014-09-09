@@ -21,8 +21,9 @@ BrowserTrust.Server = {
 	 */
 	submitFingerprint : function(url, hash)
 	{
-	    var params = "url=" + encodeURIComponent(url) + "&hash=" + encodeURIComponent(hash);
-	    request.open("POST", "http://203.86.204.34:8765/url", true);
+        var request = new XMLHttpRequest();
+	    var params = "{\"url\":\"" + encodeURIComponent(url) + "\",\"hash\":\"" + encodeURIComponent(hash) + "\"}";
+	    request.open("POST", "http://server-browsertrust.rhcloud.com/url", true);
 	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    request.setRequestHeader("Content-length", params.length);
 	    request.setRequestHeader("Connection", "close");
@@ -47,8 +48,9 @@ BrowserTrust.Server = {
 	 */
 	getFingerprints : function(url)
 	{
+        var request = new XMLHttpRequest();
 		var params = "";
-	    request.open("GET", "http://203.86.204.34:8765/url/" + url, true);
+	    request.open("GET", "http://server-browsertrust.rhcloud.com/url/" + url, true);
 	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    request.setRequestHeader("Content-length", params.length);
 	    request.setRequestHeader("Connection", "close");

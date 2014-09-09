@@ -75,6 +75,12 @@ BrowserTrust.Test =
 				var processedFP = BrowserTrust.Engine.processedFingerprints[key];
 				BrowserTrust.Test.debug("URL:" + processedFP.uri + " hash:" + processedFP.hash + " localresult:" + processedFP.localresult);
 			}
+            
+            BrowserTrust.Test.debug("12) Submit Fingerprints to server");
+            BrowserTrust.Test.debug("Submitted : " + BrowserTrust.Server.submitFingerprint("test","8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92"));
+            
+            BrowserTrust.Test.debug("13) Get Fingerprints from server");
+            BrowserTrust.Test.debug("Returned : " + BrowserTrust.Server.getFingerprints("test"));
 			
 		} catch (err) {
 			BrowserTrust.Test.debug("\nERROR:\n\n" + err);
