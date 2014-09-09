@@ -1,11 +1,29 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
 <?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
-<!DOCTYPE page SYSTEM "chrome://emptysidebar/locale/emptysidebar.dtd">
+<!DOCTYPE page SYSTEM "chrome://browsertrust/locale/browserOverlay.dtd">
 
-<page id="sbEmptySidebar" title="xul title"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
-  <vbox flex="1">
+<page id="browsertrustSidebar" 
+	  title="xul title"
+     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <vbox id="sidebarBox" flex="1">
     <label id="atest" value="xul value" />
   </vbox>
+  
+  <script>
+	var event = document.createEvent("Events");
+	event.initEvent("BrowserTrustSidebarEvent", true, false);
+	this.dispatchEvent(event);
+	
+	var sidebarBox = document.getElementById('sidebarBox');
+  	
+  	function addFingerprint(fingerprint) 
+	{
+	 	var label = document.createElement("p");
+	 	label.innerHTML = "URL: " + fingerprint.uri;
+	   	sidebarBox.appendChild(label);
+	}
+  </script>
+  
 </page>

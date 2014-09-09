@@ -5,7 +5,7 @@
 <!DOCTYPE overlay SYSTEM "chrome://browsertrust/locale/browserOverlay.dtd">
 
 <overlay id="browsertrust-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	
+
   <script type="application/x-javascript" src="chrome://browsertrust/content/test/Test.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/lib/sha256.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/HelloWorld.js" />
@@ -15,6 +15,7 @@
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Storage.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Settings.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/StaticContent.js" />
+  <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Sidebar.js" />
   
   <stringbundleset id="stringbundleset">
     <stringbundle id="browsertrust-string-bundle" src="chrome://browsertrust/locale/browserOverlay.properties" />

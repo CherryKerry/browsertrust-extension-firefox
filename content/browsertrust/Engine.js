@@ -54,7 +54,7 @@ BrowserTrust.Engine =
 	 */
 	getWindowDocument : function() 
 	{
-            return window.content.document;
+        return window.content.document;
 	},
 	
 	/**
@@ -208,6 +208,7 @@ BrowserTrust.Engine =
 			var fingerprint = BrowserTrust.Engine.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
 			BrowserTrust.Engine.processedFingerprints.push(fingerprint);
 			BrowserTrust.Storage.storeFingerprint(fingerprint);
+			BrowserTrust.Sidebar.addFingerprint(fingerprint);
 		}
 	}
 };
