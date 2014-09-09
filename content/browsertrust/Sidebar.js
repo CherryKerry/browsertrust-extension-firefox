@@ -19,7 +19,6 @@ BrowserTrust.Sidebar =
     getSidebar : function() 
 	{
     	var sidebar = document.getElementById('sidebar').contentWindow;
-    	console.log("Sidebar: " + sidebar.location.href);
 		if (sidebar.location.href == "chrome://browsertrust/content/sidebar.xul")
 		{
 			return sidebar;

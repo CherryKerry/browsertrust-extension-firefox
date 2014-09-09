@@ -7,19 +7,18 @@
 	  title="xul title"
      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   
-  <vbox id="sidebarBox" flex="1">
-    <label id="atest" value="xul value" />
+  <vbox id="sidebarBox" flex="1" style="overflow:auto">
+    <label id="atest" value="Fingerprints:" />
   </vbox>
   
   <script>
 	var event = document.createEvent("Events");
 	event.initEvent("BrowserTrustSidebarEvent", true, false);
 	this.dispatchEvent(event);
-	
-	var sidebarBox = document.getElementById('sidebarBox');
   	
   	function addFingerprint(fingerprint) 
 	{
+		var sidebarBox = document.getElementById('sidebarBox');
 	 	var label = document.createElement("p");
 	 	label.innerHTML = "URL: " + fingerprint.uri;
 	   	sidebarBox.appendChild(label);
