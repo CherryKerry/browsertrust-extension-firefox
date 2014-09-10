@@ -1,20 +1,196 @@
 <?xml version="1.0"?>
+<?xml-stylesheet href="http://getbootstrap.com/dist/css/bootstrap.min.css" type="text/css" ?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
 <?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
 <!DOCTYPE page SYSTEM "chrome://browsertrust/locale/browserOverlay.dtd">
 
-<page id="browsertrustSidebar" 
-	  title="xul title"
-     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<page 
+	id="browsertrustSidebar" 
+	title="xul title"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <div class="">
+	  <div class="col-md-4">
+	  	<button class="btn btn-xs" onclick="clear();">Clear</button>
+	  </div>
+	  <div class="col-md-4">
+	  	<button class="btn btn-xs" onclick="load();">Refresh</button>
+	  </div>
+  </div>
+  
+  <html:table class="table table-hover table-condensed">
+      <html:thead>
+        <html:tr>
+          <html:th>%</html:th>
+          <html:th>Host</html:th>
+        </html:tr>
+      </html:thead>
+      <html:tbody>
+        <html:tr id="1" onclick="clicked(this, event);">
+          <html:td>36%</html:td>
+          <html:td>www.google.com
+          		<html:div id="1:0" class="hidden">
+		         <html:table class="table table-hover table-condensed">
+		          <html:thead>
+		         	<html:tr>
+			          <html:th>%</html:th>
+			          <html:th>Type</html:th>
+			          <html:th>Count</html:th>
+			        </html:tr>
+			      </html:thead>
+			      <html:tbody>
+			        <html:tr id="1:1" onclick="clicked(this, event);">
+			          <html:td>40%</html:td>
+			          <html:td>Pictures</html:td>
+			          <html:td>5</html:td>
+			        </html:tr>
+			        
+			        <html:tr id="1:1:0" class="hidden" onclick="clicked(this, event);">
+			        	<html:td colspan="3">
+				         <html:table class="table table-striped table-condensed">
+				           <html:thead>
+					        <html:tr>
+					          <html:th>%</html:th>
+					          <html:th>Resource</html:th>
+					        </html:tr>
+					      </html:thead>
+					      <html:tbody>
+					        <html:tr>
+					          <html:td>100%</html:td>
+					          <html:td>images/srpr/logo11w.png</html:td>
+					        </html:tr>
+					        <html:tr>
+					          <html:td>100%</html:td>
+					          <html:td>images/srpr/logo1c2.png</html:td>
+					        </html:tr>
+					        <html:tr>
+					          <html:td>0%</html:td>
+					          <html:td>images/srpr/logo29e.png</html:td>
+					        </html:tr>
+					        <html:tr>
+					          <html:td>0%</html:td>
+					          <html:td>images/srpr/logo2a2.png</html:td>
+					        </html:tr>
+					        <html:tr>
+					          <html:td>0%</html:td>
+					          <html:td>images/srpr/logo3ff.png</html:td>
+					        </html:tr>
+					      </html:tbody>
+					    </html:table>
+					    </html:td>
+			        </html:tr>
+			        
+			        
+			        <html:tr id="1:2" onclick="clicked(this, event);">
+			          <html:td>100%</html:td>
+			          <html:td>HTML</html:td>
+			          <html:td>1</html:td>
+			        </html:tr>
+			        
+			        <html:tr id="1:2:0" class="hidden" onclick="clicked(this, event);">
+			        	<html:td colspan="3">
+				         <html:table class="table table-striped table-condensed">
+				           <html:thead>
+					        <html:tr>
+					          <html:th>%</html:th>
+					          <html:th>Resource</html:th>
+					        </html:tr>
+					      </html:thead>
+					      <html:tbody>
+					        <html:tr>
+					          <html:td>100%</html:td>
+					          <html:td></html:td>
+					        </html:tr>
+					      </html:tbody>
+					    </html:table>
+					    </html:td>
+			        </html:tr>
+			        
+			        <html:tr id="1:3" onclick="clicked(this, event);">
+			          <html:td>20%</html:td>
+			          <html:td>Script</html:td>
+			          <html:td>5</html:td>
+			        </html:tr>
+			        
+			        <html:tr id="1:3:0" class="hidden" onclick="clicked(this, event);">
+			        	<html:td colspan="3">
+				         <html:table class="table table-striped table-condensed">
+				           <html:thead>
+					        <html:tr>
+					          <html:th>%</html:th>
+					          <html:th>Resource</html:th>
+					        </html:tr>
+					      </html:thead>
+					      <html:tbody>
+					        <html:tr>
+					          <html:td>100%</html:td>
+					          <html:td>script/srpr/main.js</html:td>
+					        </html:tr>
+					        <html:tr>
+					          <html:td>0%</html:td>
+					          <html:td>script/srpr/main.js</html:td>
+					        </html:tr>
+					        <html:tr>
+					          <html:td>0%</html:td>
+					          <html:td>script/srpr/main.js</html:td>
+					        </html:tr>
+					        <html:tr>
+					          <html:td>0%</html:td>
+					          <html:td>script/srpr/main.js</html:td>
+					        </html:tr>
+					        <html:tr>
+					          <html:td>0%</html:td>
+					          <html:td>script/srpr/main.js</html:td>
+					        </html:tr>
+					      </html:tbody>
+					    </html:table>
+					    </html:td>
+			        </html:tr>
+			        
+			      </html:tbody>
+			    </html:table>
+			   </html:div>
+          </html:td>
+        </html:tr>
+        <html:tr id="2" onclick="clicked(this);">
+          <html:td>100%</html:td>
+          <html:td>www.trademe.co.nz</html:td>
+        </html:tr>
+      </html:tbody>
+    </html:table>
   
   <vbox id="sidebarBox" flex="1" style="overflow:auto">
     <label id="atest" value="Fingerprints:" />
   </vbox>
   
   <script>
-	var event = document.createEvent("Events");
-	event.initEvent("BrowserTrustSidebarEvent", true, false);
-	this.dispatchEvent(event);
+  	load();
+  	
+  	function clicked(element, event)
+  	{
+  		event.stopPropagation();
+  		var id = element.getAttribute('id');
+  		var tbl = document.getElementById(id + ':0');
+  		if (element.hasAttribute('class'))
+  		{
+  			element.removeAttribute('class');
+  			tbl.setAttribute('class', 'hidden');
+  		}
+  		else
+  		{
+  			element.setAttribute('class', 'active');
+  			tbl.removeAttribute('class')
+  		}
+  	}
+  	
+  	function load() 
+  	{
+  		clear();
+		var event = document.createEvent("Events");
+		event.initEvent("BrowserTrustSidebarEvent", true, false);
+		this.dispatchEvent(event);
+  	}
   	
   	function addFingerprint(fingerprint) 
 	{
@@ -22,6 +198,12 @@
 	 	var label = document.createElement("p");
 	 	label.innerHTML = "URL: " + fingerprint.uri;
 	   	sidebarBox.appendChild(label);
+	}
+	
+	function clear()
+	{
+		var sidebarBox = document.getElementById('sidebarBox');
+		sidebarBox.innerHTML = "";
 	}
   </script>
   
