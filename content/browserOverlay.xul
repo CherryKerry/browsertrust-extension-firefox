@@ -5,7 +5,7 @@
 <!DOCTYPE overlay SYSTEM "chrome://browsertrust/locale/browserOverlay.dtd">
 
 <overlay id="browsertrust-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	
+
   <script type="application/x-javascript" src="chrome://browsertrust/content/test/Test.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/lib/sha256.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/HelloWorld.js" />
@@ -15,11 +15,37 @@
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Storage.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Settings.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/StaticContent.js" />
+  <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Sidebar.js" />
+  <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Server.js" />
   
   <stringbundleset id="stringbundleset">
     <stringbundle id="browsertrust-string-bundle" src="chrome://browsertrust/locale/browserOverlay.properties" />
   </stringbundleset>
   
+  <!-- Sidebar -->
+  <menupopup id="viewSidebarMenu">
+    <menuitem key="key_openSidebar" observes="viewSidebar"  />
+  </menupopup>
+  
+  <keyset id="mainKeyset">
+    <key id="key_openSidebar" 
+    	 command="viewSidebar" 
+    	 key="&browsertrust.sidebar.accesskey;" 
+         modifiers="&browsertrust.sidebar.modifierskey;" />>
+  </keyset>
+  
+  <broadcasterset id="mainBroadcasterSet"> 
+    <broadcaster id="viewSidebar" 
+         label="&browsertrust.sidebar.title;"
+         autoCheck="false"
+         type="checkbox"
+         group="sidebar"
+         sidebarurl="chrome://browsertrust/content/sidebar.xul"
+         sidebartitle="&browsertrust.sidebar.title;"
+         oncommand="toggleSidebar('viewSidebar');" />
+  </broadcasterset>
+  
+  <!-- Button -->
   <toolbar id="nav-bar">
   <hbox id="nav-bar-buttons">
     <toolbarbutton id="custom-button-1"/>
@@ -27,12 +53,13 @@
   </toolbar>
   
   <toolbarbutton id="custom-button-1"
-  label="Custom"
-  tooltiptext="My custom toolbar button"
-  oncommand="BrowserTrust.Test.start();"
-  class="toolbarbutton-1 custombutton"
+	  label="Custom"
+	  tooltiptext="My custom toolbar button"
+	  oncommand="BrowserTrust.Test.start();"
+	  class="toolbarbutton-1 custombutton"
   />
 
+ <!-- Menu  -->
   <menubar id="main-menubar">
     <menu id="browsertrust-menu"
       	label="&browsertrust.name;"
@@ -56,22 +83,5 @@
       </menupopup>
     </menu>
   </menubar>
-  
-
-  
-  <toolbarbutton id="fbFirebugMenu" type="menu"
-    tooltiptext="firebug_options"
-    role="button" aria-haspopup="true" owns="fbFirebugMenuPopup"
-    class="fbInternational">
-
-    <!-- Button image-->
-    <image src="chrome://browsertrust/content/firebugSmall.svg"/>
-
-    <menupopup id="menu_firebug_iconMenu" class="fbFirebugMenuPopup"
-        onpopupshowing=""
-        onpopuphiding="">
-        <!-- Content comes from firebugMenuContent -->
-    </menupopup>
-  </toolbarbutton>
 
 </overlay>

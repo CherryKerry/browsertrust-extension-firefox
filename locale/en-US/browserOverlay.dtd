@@ -6,3 +6,6 @@
 <!ENTITY browsertrust.debugging.label           "Toggle Debugging">
 <!ENTITY browsertrust.settings.label            "Settings">
 <!ENTITY browsertrust.settings.accesskey        "S">
+<!ENTITY browsertrust.sidebar.title		        "Browser Trust">
+<!ENTITY browsertrust.sidebar.accesskey	        "B">
+<!ENTITY browsertrust.sidebar.modifierskey     	"shift accel">
