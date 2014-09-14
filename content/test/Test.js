@@ -1,6 +1,6 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/*  					Browser Trust Test | (c) Browser Trust 2014							      */
-/*										Version 1.0												  */
+/*					Browser Trust Test | (c) Browser Trust 2014							*/
+/*										Version 1.0												 */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 /**
@@ -8,7 +8,7 @@
  */
 if ("undefined" == typeof(BrowserTrust)) {
     var BrowserTrust = {};
-};
+}
 
 BrowserTrust.Test = 
 {
@@ -56,7 +56,7 @@ BrowserTrust.Test =
 			
 			//Is URI static or dynamic as per local storage
 			BrowserTrust.Test.debug("7) Is current page dynamic?");
-			BrowserTrust.Test.debug(BrowserTrust.Storage.isUriDynamic(fingerprint.uri))
+			BrowserTrust.Test.debug(BrowserTrust.Storage.isUriDynamic(fingerprint.uri));
 			
 			//Is URI Considered static or dynamic according to whitelist
 			BrowserTrust.Test.debug("8) Is http://www.google.co.nz/jquery.js static?");

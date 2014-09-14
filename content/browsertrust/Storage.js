@@ -8,7 +8,7 @@
  */
 if ("undefined" == typeof(BrowserTrust)) {
   var BrowserTrust = {};
-};
+}
 
 /**
  * User Story 22: Stores a fingerprint and URL locally.
@@ -121,7 +121,7 @@ BrowserTrust.Storage =
 	isUriDynamic : function(uri)
 	{
 		let dbConn = BrowserTrust.Storage.getConnection();
-		let statement = dbConn.createStatement(
+  		let statement = dbConn.createStatement(
 				"SELECT DISTINCT uri FROM dynamic_sites WHERE uri=:uri;");
 		statement.params.uri = uri;
 		try {
@@ -132,7 +132,7 @@ BrowserTrust.Storage =
 			dbConn.close();
 		}
 	},
-	
+
 	/**
 	 * Gets a connection to the sqlite Browser trust database and sets up the 
 	 * database and fingerprint table if it has not been created already
@@ -156,8 +156,4 @@ BrowserTrust.Storage =
 				"time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
 		return dbConn;
 	}
-	
-	
-	
-	
 };
