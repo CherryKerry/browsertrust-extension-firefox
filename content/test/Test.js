@@ -81,6 +81,18 @@ BrowserTrust.Test =
             
             BrowserTrust.Test.debug("13) Get Fingerprints from server");
             BrowserTrust.Test.debug("Returned : " + BrowserTrust.Server.getFingerprints("test"));
+            
+            BrowserTrust.Test.debug("14) Set Trust Server URL in browser preferences");
+            BrowserTrust.Test.debug("Setting trust server URL as http://example.com : " + BrowserTrust.Settings.setTrustServer("http://example.com"));
+            BrowserTrust.Test.debug("Trust Server URL is : " + BrowserTrust.Settings.getTrustServer());
+            
+            BrowserTrust.Test.debug("15a) Ping good fingerprint server...");
+            BrowserTrust.Test.debug("15a)" + BrowserTrust.Settings.testConnection("http://server-browsertrust.rhcloud.com"));
+            BrowserTrust.Test.debug("15b) Ping non-existant fingerprint server...");
+            BrowserTrust.Test.debug("15b)" + BrowserTrust.Settings.testConnection("http://1server-browsertrust.rhcloud.com"));
+            
+            BrowserTrust.Test.debug("16) Test new Engine.shouldFingerprint changes to take into account wildcard exclusion file");
+            BrowserTrust.Test.debug("16) Check .jpg file and *.jpg in exclusionFile returns false: " + BrowserTrust.Engine.shouldFingerprint("someImageNode.jpg", BrowserTrust.Test.btrustOutput.split()));
 			
 		} catch (err) {
 			BrowserTrust.Test.debug("\nERROR:\n\n" + err);

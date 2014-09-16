@@ -66,8 +66,10 @@ BrowserTrust.BTrust = {
         newFingerprint = BrowserTrust.Engine.fingerprint(url, data);
         console.log("3.5)newFingerprint: " + newFingerprint.uri + " " + newFingerprint.hash );
         //If existing local stored fingerprint does not exist, then add fingerprint to local and END.
-        locallyStoredFingerprints = BrowserTrust.Storage.getFingerprints(newFingerprint);
-        console.log("3.5) locally stored fingerpirnt: " + locallyStoredFingerprints[0].uri + " " + locallyStoredFingerprints[0].hash);
+        let locallyStoredFingerprints = BrowserTrust.Storage.getFingerprints(newFingerprint);
+        if(locallyStoredFingerprints[0] !== undefined) {
+            console.log("3.5) locally stored fingerpirnt: " + locallyStoredFingerprints[0].uri + " " + locallyStoredFingerprints[0].hash);
+        }
         if(locallyStoredFingerprints[0] === null || locallyStoredFingerprints[0] === undefined) {
             BrowserTrust.Storage.storeFingerprint(newFingerprint);
             console.log("3.5) No locally stored fingerprint for btrust.txt exists, creating and storing new fingerprint.");
