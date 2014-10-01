@@ -9,7 +9,7 @@
  */
 if (BrowserTrust === "undefined") {
   var BrowserTrust = {};
-};
+}
 
 BrowserTrust.JSONHandler = 
 {

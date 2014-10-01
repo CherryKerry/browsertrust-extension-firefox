@@ -1,8 +1,8 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/*  			Browser Trust Fingerprint Engine | (c) Browser Trust 2014					      */
-/*										Version 1.1												  */
-/* 							this version has not been tested 									  */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                */
+/*                      Browser Trust Fingerprint Engine | (c) Browser Trust 2014                               */
+/*                                              Version 1.1                                                     */
+/*                              this version has not been tested                                                */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                */
 
 /**
  * BrowserTrust namespace.
@@ -49,8 +49,7 @@ BrowserTrust.Engine =
 	 * Method to be called to create a fingerprint for the currently active
 	 * window html
 	 * 
-	 * @return {Fingerprint} .hash is a SHA256 hash of the uri data
-	 * 						 .uri is the uri of the hashed data
+	 * @return {Fingerprint} .hash is a SHA256 hash of the uri data uri is the uri of the hashed data
 	 */
 	fingerprintHtml : function()
 	{
@@ -132,7 +131,7 @@ BrowserTrust.Engine =
 	},
 	
 	/**
-	 * Compare fingerprints locally for a given fingerprint. If the fingerprint 
+	 * Compare fingerprints remotely for a given fingerprint. If the fingerprint 
 	 * should be excluded, the result is 1
 	 * 
 	 * @param {Fingerprint} fingerprint to compare
@@ -222,20 +221,26 @@ BrowserTrust.Engine =
 	 * Caclulate if the fingerprint node should be finger printed
 	 * 
 	 * @param {String} nodeName path name of the node
-	 * @param {String[]} trustFile the array to of path names to exclude
+	 * @param {String[]} exclusionFile the array to of path names to exclude
 	 * @return {boolean} true if the node should be fingerprinted
 	 */
-	shouldFingerprint : function(nodeName, trustFile) 
-	{
-		var shouldIgnore = false;
-		for (var i = 0; i < trustFile.length; i++) 
-		{
-			shouldIgnore = trustFile[i] == nodeName;
-		}
-		
-		return !shouldIgnore;
-	},
-	
+	shouldFingerprint : function(nodeName, exclusionFile) 
+        {
+            var shouldIgnore = false;
+            for (var i = 0; i < exclusionFile.length; i++) {
+                if(exclusionFile[i] == nodeName) {
+                    shouldIgnore = true;
+                }
+                //If nodeName matches pattern eg nodeName is a image.JPG and pattern is *.jpg then ignore
+                else if(exclusionFile[i].contains("*")) {
+                    if(nodeName.toLowerCase().indexOf(exclusionFile[i].substring(1,exclusionFile[i].length-1)) >= 0) {
+                        shouldIgnore = true;
+                    }
+                }
+            }
+            return !shouldIgnore;
+        },
+
 	/**
 	 * Process the listeners data from the tracers array
 	 */
