@@ -11,9 +11,23 @@ if ("undefined" == typeof(BrowserTrust)) {
   var BrowserTrust = {};
 }
 
+function ResultObject() {
+	this.array = [];
+	this.count = 0;
+	this.result = 0;
+	this.value = function(){
+		if (this.count == 0) {
+			return 0;
+		} 
+		else {
+			return this.result / this.count;
+		}
+	}
+}
+
 BrowserTrust.Engine = 
 {
-	processedFingerprints : [],
+	processed : [],
 	
 	/**
 	 * Method that creates a fingerprint object given a uri and string data to fingerprint
@@ -55,6 +69,31 @@ BrowserTrust.Engine =
 	getWindowDocument : function() 
 	{
         return window.content.document;
+	},
+	
+	addToArray : function(host, path, fingerprint) {
+		
+		if (this.processed.hasOwnProperty(host) == false)
+		{
+			this.processed[host] = new ResultObject();
+		}
+		this.processed[host].count++;
+		this.processed[host].result += fingerprint.result;
+		
+		var type = "Other"; //Get other need to be written
+		if (this.processed[host].array.hasOwnProperty(type) == false)
+		{
+			this.processed[host].array[type] = new ResultObject();
+		}
+		this.processed[host].array[type].count++;
+		this.processed[host].array[type].result += fingerprint.result;
+
+		if (this.processed[host].array[type].array.hasOwnProperty(path) == false)
+		{
+			this.processed[host].array[type].array[path] = new ResultObject();
+		}
+		this.processed[host].array[type].array[path].count++;
+		this.processed[host].array[type].array[path].result += fingerprint.result;
 	},
 	
 	/**
@@ -205,10 +244,11 @@ BrowserTrust.Engine =
 		while(BrowserTrust.Listeners.tracers.length > 0)
 		{
 			var tracer = BrowserTrust.Listeners.tracers.pop();
-			var fingerprint = BrowserTrust.Engine.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
-			BrowserTrust.Engine.processedFingerprints.push(fingerprint);
+			var fingerprint = this.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
+			this.addToArray(tracer.getURIHost(), tracer.getURIpath(), fingerprint);
 			BrowserTrust.Storage.storeFingerprint(fingerprint);
 			BrowserTrust.Sidebar.addFingerprint(fingerprint);
 		}
+		BrowserTrust.Sidebar.loadAllFingerprints();
 	}
 };
