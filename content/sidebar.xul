@@ -1,28 +1,268 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
 <?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://browsertrust/skin/bootstrap.min.css" type="text/css" ?>
 <!DOCTYPE page SYSTEM "chrome://browsertrust/locale/browserOverlay.dtd">
 
-<page id="browsertrustSidebar" 
-	  title="xul title"
-     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<page 
+	id="browsertrustSidebar" 
+	title="xul title"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	onload="load()">
+
+  <html:div class="row" height="50">
+  	<html:div class="col-xs-1"/>
+	  <html:div class="col-xs-5">
+	  	<html:button type="button" class="btn btn-default btn-block btn-xs" onclick="clear();">
+	  		<html:span class="glyphicon glyphicon-trash"/>
+	  		Clear
+	  	</html:button>
+	  </html:div>
+	  <html:div class="col-xs-5">
+	  	<html:button type="button" class="btn btn-default btn-block btn-xs" onclick="load();">
+	  		<html:span class="glyphicon glyphicon-refresh"/>
+	  		Refresh
+  		</html:button>
+	  </html:div>
+	  <html:div class="col-xs-1"/>
+  </html:div>
   
-  <vbox id="sidebarBox" flex="1" style="overflow:auto">
-    <label id="atest" value="Fingerprints:" />
+  <vbox flex="1" style="overflow:auto" maxwidth="396">
+    <html:div id="mainTable"></html:div>
   </vbox>
   
-  <script>
-	var event = document.createEvent("Events");
-	event.initEvent("BrowserTrustSidebarEvent", true, false);
-	this.dispatchEvent(event);
+<script type="text/javascript">
   	
-  	function addFingerprint(fingerprint) 
+  	/**
+  	 * Table action that sets the visibility of tables and animates
+  	 * the + icon to show a table is expanded or not
+  	 * 
+  	 * @param element the root element the action was made on
+  	 * @param event the event on the element
+  	 */
+  	function clicked(element, event)
+  	{
+  		event.stopPropagation();
+  		var id = element.getAttribute('id');
+  		var child = document.getElementById(id + ':0');
+  		var icon = document.getElementById(id + ':icon');
+  		if (element.hasAttribute('expanded'))
+  		{
+  			element.removeAttribute('expanded');
+  			child.setAttribute('class', 'hidden');
+  			icon.setAttribute('class', 'glyphicon glyphicon-plus');
+  		}
+  		else
+  		{
+  			element.setAttribute('expanded', 'true');
+  			child.setAttribute('class', 'info');
+  			icon.setAttribute('class', 'glyphicon glyphicon-minus');
+  		}
+  	}
+  	
+  	/**
+  	 * The loading event for reloading the sidebar, triggered onload and when
+  	 * the refresh button has been clicked
+  	 */
+  	function load() 
+  	{
+		var event = document.createEvent("Events");
+		event.initEvent("BrowserTrustSidebarLoadRequest", true, false);
+		this.dispatchEvent(event);
+  	}
+  	
+  	/**
+  	 * Clear event that calls the BrowserTrust to clear the processed tree
+  	 * and reload the sidebar data
+  	 */
+  	function clear()
 	{
-		var sidebarBox = document.getElementById('sidebarBox');
-	 	var label = document.createElement("p");
-	 	label.innerHTML = "URL: " + fingerprint.uri;
-	   	sidebarBox.appendChild(label);
+		var event = document.createEvent("Events");
+		event.initEvent("BrowserTrustSidebarClearRequest", true, false);
+		this.dispatchEvent(event);
 	}
-  </script>
-  
+	
+	/**
+	 * Build the table view from the fingerprints data tree form the BrowserTrust
+	 * classes
+	 * 
+	 * @param fingerprints the root node that holds the fingerprint tree
+	 */
+	function buildTable(fingerprints)
+	{	
+		//get the host div
+		console.log("Loading sidetable");
+		var mainTable = document.createElement('thml:div'); // document.getElementById('mainTable');
+		
+		var scrolldiv = createAndAttach(mainTable, "div");
+		scrolldiv.setAttribute('style', 'overflow:auto');
+		
+		//Prepare main table
+		var table = createAndAttach(scrolldiv, "table");
+		table.setAttribute('class', 'table table-hover table-condensed');
+		
+		//Prepare head for Hosts
+		var thead = createAndAttach(table, "thead");
+		var tr = createAndAttach(thead, "tr");
+		createAndAttachWithText(tr, "th", "%");
+		createAndAttachWithText(tr, "th", "Host");
+		createAndAttach(tr, "th").setAttribute('class', 'col-xs-1');
+		
+		//Prepare Body for Hosts
+		var tbody = createAndAttach(table, "tbody");
+		for (key in fingerprints)
+		{
+			//Add a host row to the table
+			tr = createAndAttach(tbody, "tr");
+			tr.setAttribute('id', key);
+			tr.setAttribute('onclick', 'clicked(this, event);');
+			createAndAttachWithText(tr, "td", fingerprints[key].value() + "%");
+			createAndAttachWithText(tr, "td", key);
+			createButtonAndAttach(tr, key);
+			
+			//Add a type table for the host
+			if (fingerprints[key].hasOwnProperty('array'))
+			{
+				tr = createAndAttach(tbody, "tr");
+				tr.setAttribute('id', key + ":0");
+				tr.setAttribute('class', "hidden");
+				tr.setAttribute('onclick', 'clicked(this, event);');
+				var td = createAndAttach(tr, "td");
+				td.setAttribute('colspan', '3');
+				//
+				buildTypeTables(td, key, fingerprints[key].array);
+			}
+		}
+		document.getElementById('mainTable').innerHTML = mainTable.innerHTML;
+	}
+	
+	/**
+	 * Build the table view for the Types data
+	 * 
+	 * @param parent the parent table element
+	 * @param id the key of the parent
+	 * @param types the array of types in the tree
+	 */
+	function buildTypeTables(parent, id, types)
+	{
+		//Prepare main table
+		var table = createAndAttach(parent, "table");
+		table.setAttribute('class', 'table table-hover table-condensed');
+		
+		//Prepare head for Types
+		var thead = createAndAttach(table, "thead");
+		var tr = createAndAttach(thead, "tr");
+		createAndAttachWithText(tr, "th", "%");
+		createAndAttachWithText(tr, "th", "Type");
+		createAndAttachWithText(tr, "th", "Count");
+		createAndAttach(tr, "th").setAttribute('class', 'col-xs-1');
+		
+		//Prepare body for Types
+		var tbody = createAndAttach(table, "tbody");
+		for (key in types)
+		{	
+			tr = createAndAttach(tbody, "tr");
+			tr.setAttribute('id', id + key);
+			tr.setAttribute('onclick', 'clicked(this, event);');
+			createAndAttachWithText(tr, "td", types[key].value() + '%');
+			createAndAttachWithText(tr, "td", key);
+			
+		  	if (types[key].hasOwnProperty('array'))
+			{
+				createAndAttachWithText(tr, "td", types[key].count);
+				createButtonAndAttach(tr, id + key);
+				
+				tr = createAndAttach(tbody, "tr");
+				tr.setAttribute('id', id + key + ":0");
+				tr.setAttribute('class', "hidden");
+				tr.setAttribute('onclick', 'clicked(this, event);');
+				var td = createAndAttach(tr, "td");
+				td.setAttribute('colspan', '4');
+				
+				buildResourceTables(td, id + key, types[key].array);
+			}
+			else
+			{
+				createAndAttachWithText(tr, "td", "0");
+			}
+		}
+	}
+	
+	/**
+	 * Build the table view for the resources data
+	 * 
+	 * @param parent the parent table element
+	 * @param id the key of the parent
+	 * @param resources the array of resources in the tree
+	 */
+	function buildResourceTables(parent, id, resources)
+	{
+		//Prepare main table
+		var table = createAndAttach(parent, "table");
+		table.setAttribute('class', 'table table-striped table-bordered table-condensed');
+		
+		//Prepare head for Types
+		var thead = createAndAttach(table, "thead");
+		var tr = createAndAttach(thead, "tr");
+		createAndAttachWithText(tr, "th", "%");
+		createAndAttachWithText(tr, "th", "Resource");
+		
+		//Prepare body for Types
+		var tbody = createAndAttach(table, "tbody");
+		for (key in resources)
+		{
+			tr = createAndAttach(tbody, "tr");
+			createAndAttachWithText(tr, "td", resources[key].value() + '%');
+			createAndAttachWithText(tr, "td", key);
+		}
+		
+	}
+	
+	/**
+	 * Creates a special table button element at adds it to the parent
+	 * 
+	 * @param parent the parent element to attach to
+	 * @param id the id of the element
+	 */
+	function createButtonAndAttach(parent, id)
+	{
+		var td = createAndAttach(parent, "td");
+		var span = createAndAttach(td, "span");
+		span.setAttribute('id', id + ':icon');
+		span.setAttribute('class', 'glyphicon glyphicon-plus');
+		return td;
+	}
+	
+	/**
+	 * Create and attach an html element to the parent given the tag type
+	 * 
+	 * @param parent the parent element to attach to
+	 * @param tag the tag of the html element
+	 */
+	function createAndAttach(parent, tag)
+	{
+		var element = document.createElement("html:" + tag);
+		parent.appendChild(element);
+		return element;
+	}
+	
+	/**
+	 * Create and attach an html element to the parent given the tag type
+	 * and add textNode with the given text
+	 * 
+	 * @param parent the parent element to attach to
+	 * @param tag the tag of the html element
+	 * @param text the text to add to the element
+	 */
+	function createAndAttachWithText(parent, tag, text) 
+	{
+		var element = createAndAttach(parent, tag);
+		var label = document.createElement("description");
+	 	var newtext = document.createTextNode(text);
+		label.appendChild(newtext);
+		element.appendChild(label);
+		return element
+	}
+</script>  
 </page>

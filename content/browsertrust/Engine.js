@@ -1,8 +1,8 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/*  			Browser Trust Fingerprint Engine | (c) Browser Trust 2014					      */
-/*										Version 1.1												  */
-/* 							this version has not been tested 									  */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                */
+/*                      Browser Trust Fingerprint Engine | (c) Browser Trust 2014                               */
+/*                                              Version 1.1                                                     */
+/*                              this version has not been tested                                                */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                */
 
 /**
  * BrowserTrust namespace.
@@ -11,9 +11,23 @@ if ("undefined" == typeof(BrowserTrust)) {
   var BrowserTrust = {};
 }
 
+function ResultObject() {
+	this.array = [];
+	this.count = 0;
+	this.result = 0;
+	this.value = function(){
+		if (this.count == 0) {
+			return 0;
+		} 
+		else {
+			return this.result / this.count;
+		}
+	}
+}
+
 BrowserTrust.Engine = 
 {
-	processedFingerprints : [],
+	processed : [],
 	
 	/**
 	 * Method that creates a fingerprint object given a uri and string data to fingerprint
@@ -35,8 +49,7 @@ BrowserTrust.Engine =
 	 * Method to be called to create a fingerprint for the currently active
 	 * window html
 	 * 
-	 * @return {Fingerprint} .hash is a SHA256 hash of the uri data
-	 * 						 .uri is the uri of the hashed data
+	 * @return {Fingerprint} .hash is a SHA256 hash of the uri data uri is the uri of the hashed data
 	 */
 	fingerprintHtml : function()
 	{
@@ -55,6 +68,31 @@ BrowserTrust.Engine =
 	getWindowDocument : function() 
 	{
         return window.content.document;
+	},
+	
+	addToArray : function(host, path, fingerprint) {
+		
+		if (this.processed.hasOwnProperty(host) == false)
+		{
+			this.processed[host] = new ResultObject();
+		}
+		this.processed[host].count++;
+		this.processed[host].result += fingerprint.result;
+		
+		var type = "Other"; //Get other need to be written
+		if (this.processed[host].array.hasOwnProperty(type) == false)
+		{
+			this.processed[host].array[type] = new ResultObject();
+		}
+		this.processed[host].array[type].count++;
+		this.processed[host].array[type].result += fingerprint.result;
+
+		if (this.processed[host].array[type].array.hasOwnProperty(path) == false)
+		{
+			this.processed[host].array[type].array[path] = new ResultObject();
+		}
+		this.processed[host].array[type].array[path].count++;
+		this.processed[host].array[type].array[path].result += fingerprint.result;
 	},
 	
 	/**
@@ -93,7 +131,7 @@ BrowserTrust.Engine =
 	},
 	
 	/**
-	 * Compare fingerprints locally for a given fingerprint. If the fingerprint 
+	 * Compare fingerprints remotely for a given fingerprint. If the fingerprint 
 	 * should be excluded, the result is 1
 	 * 
 	 * @param {Fingerprint} fingerprint to compare
@@ -183,20 +221,26 @@ BrowserTrust.Engine =
 	 * Caclulate if the fingerprint node should be finger printed
 	 * 
 	 * @param {String} nodeName path name of the node
-	 * @param {String[]} trustFile the array to of path names to exclude
+	 * @param {String[]} exclusionFile the array to of path names to exclude
 	 * @return {boolean} true if the node should be fingerprinted
 	 */
-	shouldFingerprint : function(nodeName, trustFile) 
-	{
-		var shouldIgnore = false;
-		for (var i = 0; i < trustFile.length; i++) 
-		{
-			shouldIgnore = trustFile[i] == nodeName;
-		}
-		
-		return !shouldIgnore;
-	},
-	
+	shouldFingerprint : function(nodeName, exclusionFile) 
+        {
+            var shouldIgnore = false;
+            for (var i = 0; i < exclusionFile.length; i++) {
+                if(exclusionFile[i] == nodeName) {
+                    shouldIgnore = true;
+                }
+                //If nodeName matches pattern eg nodeName is a image.JPG and pattern is *.jpg then ignore
+                else if(exclusionFile[i].contains("*")) {
+                    if(nodeName.toLowerCase().indexOf(exclusionFile[i].substring(1,exclusionFile[i].length-1)) >= 0) {
+                        shouldIgnore = true;
+                    }
+                }
+            }
+            return !shouldIgnore;
+        },
+
 	/**
 	 * Process the listeners data from the tracers array
 	 */
@@ -205,10 +249,11 @@ BrowserTrust.Engine =
 		while(BrowserTrust.Listeners.tracers.length > 0)
 		{
 			var tracer = BrowserTrust.Listeners.tracers.pop();
-			var fingerprint = BrowserTrust.Engine.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
-			BrowserTrust.Engine.processedFingerprints.push(fingerprint);
+			var fingerprint = this.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
+			this.addToArray(tracer.getURIHost(), tracer.getURIpath(), fingerprint);
 			BrowserTrust.Storage.storeFingerprint(fingerprint);
 			BrowserTrust.Sidebar.addFingerprint(fingerprint);
 		}
+		BrowserTrust.Sidebar.loadAllFingerprints();
 	}
 };

@@ -33,24 +33,35 @@ BrowserTrust.Sidebar =
      */
     addFingerprint : function(fingerprint) 
 	{
-    	var sidebar = BrowserTrust.Sidebar.getSidebar();
+    	var sidebar = this.getSidebar();
     	if (sidebar != null) 
 		{
-    		sidebar.addFingerprint(fingerprint);
+    		//sidebar.addFingerprint(fingerprint);
     	}
     },
     
     /**
-     * Load all the fingerprints upon opening the sidebar
+     * Load all the fingerprints to the sidebar
      */
     loadAllFingerprints : function() 
 	{
-    	for (var key in BrowserTrust.Engine.processedFingerprints) {
-			var processedFP = BrowserTrust.Engine.processedFingerprints[key];
-			BrowserTrust.Sidebar.addFingerprint(processedFP);
-		}
+		var sidebar = BrowserTrust.Sidebar.getSidebar();
+		if (sidebar != null) {
+    		sidebar.buildTable(BrowserTrust.Engine.processed);
+    	}
+    },
+    
+    /**
+     * CLear all the fingerprints and reload sidebar 
+     */
+    clearAllFingerprints : function() 
+	{
+		BrowserTrust.Engine.processed = [];
+		BrowserTrust.Sidebar.loadAllFingerprints();
     }
+    
 }
 
 //Add the listeneing event for when the sidebar loads
-document.addEventListener("BrowserTrustSidebarEvent", BrowserTrust.Sidebar.loadAllFingerprints, false, true);
+document.addEventListener("BrowserTrustSidebarLoadRequest", BrowserTrust.Sidebar.loadAllFingerprints, false, true);
+document.addEventListener("BrowserTrustSidebarClearRequest", BrowserTrust.Sidebar.clearAllFingerprints, false, true);
