@@ -15,14 +15,16 @@ BrowserTrust.Server = {
 	/**
 	 * Submit URL and Hash for the fingerprint server to store.
 	 * 
-	 * @param {String} URL to Submit
+	 * @param {String} Host portion of URL to submit
+	 * @param {String} Path portion of URL to submit
+	 * @param {String} File type
 	 * @param {String} Calculated Hash of the URL
 	 * @return {Boolean} true if successfully submitted
 	 */
-	submitFingerprint : function(url, hash)
+	submitFingerprint : function(host, path, type, hash)
 	{
         var request = new XMLHttpRequest();
-	    var params = "{\"url\":\"" + encodeURIComponent(url) + "\",\"hash\":\"" + encodeURIComponent(hash) + "\"}";
+		var params = "{\"host\":\"" + host + "\",\"path\":\"" + path + "\",\"type\":\"" + type + "\",\"hash\":\"" + hash + "\"}";
 	    request.open("POST", "http://server-browsertrust.rhcloud.com/url", true);
 	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    request.setRequestHeader("Content-length", params.length);
@@ -43,14 +45,15 @@ BrowserTrust.Server = {
 	/**
 	 * Retrieve all the hashes stored by the fingerprint server for a URL. 
 	 * 
-	 * @param {String} URL to Submit
+	 * @param {String} Host portion of URL to submit
+	 * @param {String} Path portion of URL to submit
 	 * @return {String} JSON Response if Successful
 	 */
-	getFingerprints : function(url)
+	getFingerprints : function(host, path)
 	{
         var request = new XMLHttpRequest();
 		var params = "";
-	    request.open("GET", "http://server-browsertrust.rhcloud.com/url/" + url, true);
+	    request.open("GET", "http://server-browsertrust.rhcloud.com/url/" + host + "/path/" + path, true);
 	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    request.setRequestHeader("Content-length", params.length);
 	    request.setRequestHeader("Connection", "close");
@@ -68,10 +71,11 @@ BrowserTrust.Server = {
 	    request.send(params);
 	},
 	
-	submitFingerprintSynchronously : function(url, hash)
+	submitFingerprintSynchronously : function(host, path, type, hash)
 	{
         var request = new XMLHttpRequest();
-	    var params = "{\"url\":\"" + encodeURIComponent(url) + "\",\"hash\":\"" + encodeURIComponent(hash) + "\"}";
+	    var params = "{\"host\":\"" + host + "\",\"path\":\"" + path + "\",\"type\":\"" + type + "\",\"hash\":\"" + hash + "\"}";
+		console.log(params);
 	    request.open("POST", "http://server-browsertrust.rhcloud.com/url", false);
 	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    request.setRequestHeader("Content-length", params.length);
@@ -79,25 +83,25 @@ BrowserTrust.Server = {
 		request.send(params);
 		if (request.status == 200) 
 		{
-			return request.responseText;
+			return true;
 		} 
 		else {
-			return "ERROR";
+			return false;
 		}	    
 	},
 	
-	getFingerprintsSynchronously : function(url)
+	getFingerprintsSynchronously : function(host, path)
 	{
         var request = new XMLHttpRequest();
 		var params = "";
-	    request.open("GET", "http://server-browsertrust.rhcloud.com/url/" + url, false);
+	    request.open("GET", "http://server-browsertrust.rhcloud.com/url/" + host + "/path/" + path, false);
 	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    request.setRequestHeader("Content-length", params.length);
 	    request.setRequestHeader("Connection", "close");
 		request.send(params);
 	    if (request.status == 200) 
 		{
-			return request.responseText;
+			return JSON.parse(request.responseText)['fingerprints'];
 		} 
 		else {
 			return "ERROR";

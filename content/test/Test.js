@@ -77,7 +77,7 @@ BrowserTrust.Test =
 			}
             
             BrowserTrust.Test.debug("12) Submit Fingerprints to server");
-			if(BrowserTrust.Server.submitFingerprintSynchronously("test","8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92"))
+			if(BrowserTrust.Server.submitFingerprintSynchronously("http://www.wintech.net.nz", "/images/twitter_64.png", "image", "6f271c5d4297de42634bcec2fcdb5e62670368fa276db539122b45a5bc96ad84"))
 			{
 				BrowserTrust.Test.debug("Submitted = true");
 			} else {
@@ -85,27 +85,18 @@ BrowserTrust.Test =
 			}
             
             BrowserTrust.Test.debug("13) Get Fingerprints from server");
-<<<<<<< HEAD
-            BrowserTrust.Test.debug("Returned : " + BrowserTrust.Server.getFingerprintsSynchronously("test"));
+			
+            BrowserTrust.Test.debug("Returned : " + BrowserTrust.Server.getFingerprintsSynchronously("http://www.wintech.net.nz", "/images/twitter_64.png"));
 			
 			BrowserTrust.Test.debug("14) Array Split of Requested Fingerprints");
-			var returnedValues = BrowserTrust.Server.getFingerprintsSynchronously("test");
-			var replaceAllDoubleQuotes = returnedValues.replace(/"/g, "");
-			var removedFrontBrackets = replaceAllDoubleQuotes.replace("[", "");
-			var removedRearBrackets = removedFrontBrackets.replace("]", "");
-			var changedQuotations = removedRearBrackets.replace(/'/g, "\"");
-			var myArray = changedQuotations.split(", ");
-			for (var i=0; i<myArray.length; i++) {
-				//BrowserTrust.Test.debug("myArray: " + i + " " + myArray[i]);
-				BrowserTrust.Test.debug(myArray[i]);
-				var JSONArray = JSON.parse(myArray[i]);
-				for (var x=0; x<JSONArray.length; x++) {
-					BrowserTrust.Test.debug(i + " " + x + " " + JSONArray[i]);
-				}
-			}
-            
-=======
-            BrowserTrust.Test.debug("Returned : " + BrowserTrust.Server.getFingerprints("test"));
+			var returnedValues = BrowserTrust.Server.getFingerprintsSynchronously("http://www.wintech.net.nz", "/images/twitter_64.png");
+			//var objReturnedValues = JSON.parse(returnedValues);
+			returnedValues.forEach( function (arrayItem)
+			{
+				//var x = JSON.parse(arrayItem);
+				//BrowserTrust.Test.debug("JSON Parsed: " + x['hash']);
+				BrowserTrust.Test.debug(arrayItem['hash']);
+			});
             
             BrowserTrust.Test.debug("14) Set Trust Server URL in browser preferences");
             BrowserTrust.Test.debug("Setting trust server URL as http://example.com : " + BrowserTrust.Settings.setTrustServer("http://example.com"));
@@ -118,7 +109,6 @@ BrowserTrust.Test =
             
             BrowserTrust.Test.debug("16) Test new Engine.shouldFingerprint changes to take into account wildcard exclusion file");
             BrowserTrust.Test.debug("16) Check .jpg file and *.jpg in exclusionFile returns false: " + BrowserTrust.Engine.shouldFingerprint("someImageNode.jpg", BrowserTrust.Test.btrustOutput.split()));
->>>>>>> origin/master
 			
 		} catch (err) {
 			BrowserTrust.Test.debug("\nERROR:\n\n" + err);
