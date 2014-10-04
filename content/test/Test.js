@@ -77,10 +77,32 @@ BrowserTrust.Test =
 			}
             
             BrowserTrust.Test.debug("12) Submit Fingerprints to server");
-            BrowserTrust.Test.debug("Submitted : " + BrowserTrust.Server.submitFingerprint("test","8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92"));
+			if(BrowserTrust.Server.submitFingerprintSynchronously("test","8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92"))
+			{
+				BrowserTrust.Test.debug("Submitted = true");
+			} else {
+				BrowserTrust.Test.debug("Submitted = false");
+			}
             
             BrowserTrust.Test.debug("13) Get Fingerprints from server");
-            BrowserTrust.Test.debug("Returned : " + BrowserTrust.Server.getFingerprints("test"));
+            BrowserTrust.Test.debug("Returned : " + BrowserTrust.Server.getFingerprintsSynchronously("test"));
+			
+			BrowserTrust.Test.debug("14) Array Split of Requested Fingerprints");
+			var returnedValues = BrowserTrust.Server.getFingerprintsSynchronously("test");
+			var replaceAllDoubleQuotes = returnedValues.replace(/"/g, "");
+			var removedFrontBrackets = replaceAllDoubleQuotes.replace("[", "");
+			var removedRearBrackets = removedFrontBrackets.replace("]", "");
+			var changedQuotations = removedRearBrackets.replace(/'/g, "\"");
+			var myArray = changedQuotations.split(", ");
+			for (var i=0; i<myArray.length; i++) {
+				//BrowserTrust.Test.debug("myArray: " + i + " " + myArray[i]);
+				BrowserTrust.Test.debug(myArray[i]);
+				var JSONArray = JSON.parse(myArray[i]);
+				for (var x=0; x<JSONArray.length; x++) {
+					BrowserTrust.Test.debug(i + " " + x + " " + JSONArray[i]);
+				}
+			}
+            
 			
 		} catch (err) {
 			BrowserTrust.Test.debug("\nERROR:\n\n" + err);

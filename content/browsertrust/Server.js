@@ -58,6 +58,7 @@ BrowserTrust.Server = {
 	    {
 			if (request.readyState == 4 && request.status == 200) 
 			{
+				window.alert(request.responseText);
 				return request.responseText;
 		    } 
 		    else if(request.readyState == 4) {
@@ -65,5 +66,42 @@ BrowserTrust.Server = {
 		    }
 	    }; 
 	    request.send(params);
+	},
+	
+	submitFingerprintSynchronously : function(url, hash)
+	{
+        var request = new XMLHttpRequest();
+	    var params = "{\"url\":\"" + encodeURIComponent(url) + "\",\"hash\":\"" + encodeURIComponent(hash) + "\"}";
+	    request.open("POST", "http://server-browsertrust.rhcloud.com/url", false);
+	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	    request.setRequestHeader("Content-length", params.length);
+	    request.setRequestHeader("Connection", "close");
+		request.send(params);
+		if (request.status == 200) 
+		{
+			return request.responseText;
+		} 
+		else {
+			return "ERROR";
+		}	    
+	},
+	
+	getFingerprintsSynchronously : function(url)
+	{
+        var request = new XMLHttpRequest();
+		var params = "";
+	    request.open("GET", "http://server-browsertrust.rhcloud.com/url/" + url, false);
+	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	    request.setRequestHeader("Content-length", params.length);
+	    request.setRequestHeader("Connection", "close");
+		request.send(params);
+	    if (request.status == 200) 
+		{
+			return request.responseText;
+		} 
+		else {
+			return "ERROR";
+		}
+	    
 	}
 };
