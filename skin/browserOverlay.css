@@ -24,14 +24,7 @@
 .custombutton:active
   {-moz-image-region: rect( 0px 183px 20px 164px);}
   
-.wordwrap2 { 
-   white-space: pre-wrap;      /* CSS3 */ 
-   word-wrap: break-word;      /* IE */
-   color: blue;
-   max-width: 200px;
- }
  .wordwrap {  
-   color: red;
    white-space: nowrap;
    overflow: hidden;
    text-overflow: ellipsis;
