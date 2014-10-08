@@ -14,15 +14,23 @@ if ("undefined" == typeof(BrowserTrust)) {
 function ResultObject() {
 	this.array = [];
 	this.count = 0;
+	this.resultCount = 0;
 	this.result = 0;
 	this.value = function(){
-		if (this.count == 0) {
+		if (this.resultCount == 0 || this.result == 0) {
 			return 0;
 		} 
 		else {
-			return this.result / this.count;
+			return (this.result / this.resultCount * 100).toFixed(0);
 		}
 	}
+}
+
+function Fingerprint(hash, host, path, result) {
+	this.hash = hash;
+	this.host = host;
+	this.path = path;
+	this.result = result;
 }
 
 BrowserTrust.Engine = 
@@ -72,26 +80,29 @@ BrowserTrust.Engine =
 	
 	addToArray : function(host, path, fingerprint) {
 		
+		fingerprint.result = isNaN(fingerprint.result) ? 0 : fingerprint.result;
 		if (this.processed.hasOwnProperty(host) == false)
 		{
 			this.processed[host] = new ResultObject();
 		}
-		this.processed[host].count++;
+		this.processed[host].resultCount++;
 		this.processed[host].result += fingerprint.result;
 		
 		var type = "Other"; //Get other need to be written
 		if (this.processed[host].array.hasOwnProperty(type) == false)
 		{
 			this.processed[host].array[type] = new ResultObject();
+			this.processed[host].count++;
 		}
-		this.processed[host].array[type].count++;
+		this.processed[host].array[type].resultCount++;
 		this.processed[host].array[type].result += fingerprint.result;
 
 		if (this.processed[host].array[type].array.hasOwnProperty(path) == false)
 		{
 			this.processed[host].array[type].array[path] = new ResultObject();
+			this.processed[host].array[type].count++;
 		}
-		this.processed[host].array[type].array[path].count++;
+		this.processed[host].array[type].array[path].resultCount++;
 		this.processed[host].array[type].array[path].result += fingerprint.result;
 	},
 	
@@ -178,7 +189,7 @@ BrowserTrust.Engine =
 	{
 		var fingerprint = BrowserTrust.Engine.fingerprint(uri, data);
 		var localresult = BrowserTrust.Engine.compareFingerprint(fingerprint);
-		fingerprint.localresult = localresult;
+		fingerprint.result = localresult;
 		return fingerprint;
 	},
 	

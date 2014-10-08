@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
-<?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
+<?xml-stylesheet type="text/css" href="chrome://browsertrust/skin/browserOverlay.css"?>
 <?xml-stylesheet href="chrome://browsertrust/skin/bootstrap.min.css" type="text/css" ?>
 <!DOCTYPE page SYSTEM "chrome://browsertrust/locale/browserOverlay.dtd">
 
@@ -11,26 +11,29 @@
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 	onload="load()">
 
-  <html:div class="row" height="50">
-  	<html:div class="col-xs-1"/>
-	  <html:div class="col-xs-5">
-	  	<html:button type="button" class="btn btn-default btn-block btn-xs" onclick="clear();">
-	  		<html:span class="glyphicon glyphicon-trash"/>
-	  		Clear
-	  	</html:button>
+	<vbox>
+	  <html:div class="row" id="buttonBox" >
+	  	<html:div class="col-xs-1"/>
+		  <html:div class="col-xs-5">
+		  	<html:button type="button" class="btn btn-default btn-block btn-xs" onclick="clear();">
+		  		<html:span class="glyphicon glyphicon-trash"/>
+		  		Clear
+		  	</html:button>
+		  </html:div>
+		  <html:div class="col-xs-5">
+		  	<html:button type="button" class="btn btn-default btn-block btn-xs" onclick="load();">
+		  		<html:span class="glyphicon glyphicon-refresh"/>
+		  		Refresh
+	  		</html:button>
+		  </html:div>
+		  <html:div class="col-xs-1"/>
 	  </html:div>
-	  <html:div class="col-xs-5">
-	  	<html:button type="button" class="btn btn-default btn-block btn-xs" onclick="load();">
-	  		<html:span class="glyphicon glyphicon-refresh"/>
-	  		Refresh
-  		</html:button>
-	  </html:div>
-	  <html:div class="col-xs-1"/>
-  </html:div>
+	  
+	  <vbox id="mainTableBox" flex="1" style="overflow:auto">
+	    <html:div id="mainTable"></html:div>
+	  </vbox>
   
-  <vbox flex="1" style="overflow:auto" maxwidth="396">
-    <html:div id="mainTable"></html:div>
-  </vbox>
+	</vbox>
   
 <script type="text/javascript">
   	
@@ -118,7 +121,7 @@
 			tr.setAttribute('id', key);
 			tr.setAttribute('onclick', 'clicked(this, event);');
 			createAndAttachWithText(tr, "td", fingerprints[key].value() + "%");
-			createAndAttachWithText(tr, "td", key);
+			createAndAttachWithTextWraped(tr, "td", key);
 			createButtonAndAttach(tr, key);
 			
 			//Add a type table for the host
@@ -135,6 +138,8 @@
 			}
 		}
 		document.getElementById('mainTable').innerHTML = mainTable.innerHTML;
+		var height = window.innerHeight;
+		document.getElementById('mainTableBox').setAttribute('height', height);
 	}
 	
 	/**
@@ -166,7 +171,7 @@
 			tr.setAttribute('id', id + key);
 			tr.setAttribute('onclick', 'clicked(this, event);');
 			createAndAttachWithText(tr, "td", types[key].value() + '%');
-			createAndAttachWithText(tr, "td", key);
+			createAndAttachWithTextWraped(tr, "td", key);
 			
 		  	if (types[key].hasOwnProperty('array'))
 			{
@@ -214,7 +219,7 @@
 		{
 			tr = createAndAttach(tbody, "tr");
 			createAndAttachWithText(tr, "td", resources[key].value() + '%');
-			createAndAttachWithText(tr, "td", key);
+			createAndAttachWithTextWraped(tr, "td", key);
 		}
 		
 	}
@@ -254,13 +259,34 @@
 	 * @param parent the parent element to attach to
 	 * @param tag the tag of the html element
 	 * @param text the text to add to the element
+	 * @return element with text applied
 	 */
 	function createAndAttachWithText(parent, tag, text) 
 	{
 		var element = createAndAttach(parent, tag);
-		var label = document.createElement("description");
 	 	var newtext = document.createTextNode(text);
+		element.appendChild(newtext);
+		return element
+	}
+	
+	/**
+	 * Create and attach an html element to the parent given the tag type
+	 * and add textNode with the given text such that the width is limited 
+	 * and the element has a tool tip to display cut off text
+	 * 
+	 * @param parent the parent element to attach to
+	 * @param tag the tag of the html element
+	 * @param text the text to add to the element
+	 * @return element with text applied and limited width
+	 */
+	function createAndAttachWithTextWraped(parent, tag, text) 
+	{
+		var element = createAndAttach(parent, tag);
+	 	var newtext = document.createTextNode(text);
+		var label = document.createElement("hbox");
 		label.appendChild(newtext);
+		label.setAttribute('class', 'wordwrap');
+		label.setAttribute('tooltiptext', text);
 		element.appendChild(label);
 		return element
 	}
