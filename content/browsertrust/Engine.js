@@ -262,6 +262,8 @@ BrowserTrust.Engine =
 			var tracer = BrowserTrust.Listeners.tracers.pop();
 			var fingerprint = this.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
 			this.addToArray(tracer.getURIHost(), tracer.getURIpath(), fingerprint);
+			//window.alert(tracer.getURIHost() + " " + tracer.getURIpath() + " " + "Other" + " " + fingerprint.hash);
+			BrowserTrust.Server.submitFingerprint(tracer.getURIHost(), tracer.getURIpath(), "Other", fingerprint.hash);
 			BrowserTrust.Storage.storeFingerprint(fingerprint);
 			BrowserTrust.Sidebar.addFingerprint(fingerprint);
 		}

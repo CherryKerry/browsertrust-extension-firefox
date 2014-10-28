@@ -59,13 +59,16 @@ BrowserTrust.Listeners =
 	        if (topic == "http-on-modify-request") {
 	        	//Setup Http Channel used in the Tracer
 	        	subject.QueryInterface(Ci.nsIHttpChannel);
-	        	//Create tracer and add to tracer array
-		        var newListener = new TracingListener();
-		        newListener.request = subject;
-		        BrowserTrust.Listeners.tracers.push(newListener);
-		        //Attach tracing listener to request
-		        subject.QueryInterface(Ci.nsITraceableChannel);
-		        newListener.originalListener = subject.setNewListener(newListener);
+				if(!(subject.URI.host.indexOf("server-browsertrust.rhcloud.com") > -1))
+				{
+					//Create tracer and add to tracer array
+					var newListener = new TracingListener();
+					newListener.request = subject;
+					BrowserTrust.Listeners.tracers.push(newListener);
+					//Attach tracing listener to request
+					subject.QueryInterface(Ci.nsITraceableChannel);
+					newListener.originalListener = subject.setNewListener(newListener);
+				}
 		    }
 	    },
 	    
