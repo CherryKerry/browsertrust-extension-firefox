@@ -34,9 +34,11 @@ BrowserTrust.Storage =
 			statement.execute();
 			return true;
 		} catch(err) {
-			return false;
 		} finally {
-			dbConn.close();
+			try {
+				dbConn.close();
+			} catch(err) {
+			}
 		}
   	},
   	
