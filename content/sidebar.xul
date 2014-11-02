@@ -28,9 +28,9 @@
 		  	</html:button>
 		  </html:div>
 		  <html:div class="col-xs-5">
-		  	<html:button type="button" class="btn btn-default btn-block btn-xs" onclick="load();">
-		  		<html:span class="glyphicon glyphicon-refresh"/>
-		  		Refresh
+		  	<html:button type="button" class="btn btn-default btn-block btn-xs" onclick="BrowserTrust.Settings.openPreferences();">
+		  		<html:span class="glyphicon glyphicon-cog"/>
+		  		Settings
 	  		</html:button>
 		  </html:div>
 		  <html:div class="col-xs-1"/>
@@ -41,7 +41,8 @@
 	  </vbox>
   
 	</vbox>
-  
+
+<script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Settings.js" />
 <script type="text/javascript">
 	
 	var resourseSelected = null;
@@ -122,7 +123,6 @@
 		event.initEvent("BrowserTrustSidebarLoadRequest", true, false);
 		this.dispatchEvent(event);
   	}
-  	
   	/**
   	 * Clear event that calls the BrowserTrust to clear the processed tree
   	 * and reload the sidebar data
