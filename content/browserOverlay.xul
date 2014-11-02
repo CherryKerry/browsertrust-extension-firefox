@@ -29,35 +29,48 @@
   
   <keyset id="mainKeyset">
     <key id="key_openSidebar" 
-    	 command="viewSidebar" 
+    	 command="viewBrowsertrustSidebar" 
     	 key="&browsertrust.sidebar.accesskey;" 
          modifiers="&browsertrust.sidebar.modifierskey;" />>
   </keyset>
   
   <broadcasterset id="mainBroadcasterSet"> 
-    <broadcaster id="viewSidebar" 
+    <broadcaster id="viewBrowsertrustSidebar" 
          label="&browsertrust.sidebar.title;"
          autoCheck="false"
          type="checkbox"
          group="sidebar"
          sidebarurl="chrome://browsertrust/content/sidebar.xul"
          sidebartitle="&browsertrust.sidebar.title;"
-         oncommand="toggleSidebar('viewSidebar');" />
+         oncommand="toggleSidebar('viewBrowsertrustSidebar');" />
   </broadcasterset>
   
   <!-- Button -->
   <toolbar id="nav-bar">
   <hbox id="nav-bar-buttons">
-    <toolbarbutton id="custom-button-1"/>
+    <toolbarbutton id="browsertrust-button"/>
     </hbox>
   </toolbar>
   
-  <toolbarbutton id="custom-button-1"
+  <toolbarbutton id="browsertrust-button"
 	  label="Custom"
 	  tooltiptext="My custom toolbar button"
-	  oncommand="BrowserTrust.Test.start();"
+	  oncommand="BrowserTrust.Sidebar.toggleDisplay();"
 	  class="toolbarbutton-1 custombutton"
   />
+  
+  <script type="text/javascript">
+  	function turnButtonRed() {
+  		var button = document.getElementById("browsertrust-button");
+		button.className = "toolbarbutton-1 custombutton-red";
+  	}
+  	
+  	function turnButtonGreen() {
+  		var button = document.getElementById("browsertrust-button");
+		button.className = "toolbarbutton-1 custombutton";
+  	}
+  </script>
+  	
 
  <!-- Menu  -->
   <menubar id="main-menubar">

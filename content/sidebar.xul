@@ -108,7 +108,7 @@
 		//Prepare head for Hosts
 		var thead = createAndAttach(table, "thead");
 		var tr = createAndAttach(thead, "tr");
-		createAndAttachWithText(tr, "th", "%");
+		createAndAttachWithText(tr, "th", "Changes");
 		createAndAttachWithText(tr, "th", "Host");
 		createAndAttach(tr, "th").setAttribute('class', 'col-xs-1');
 		
@@ -120,7 +120,8 @@
 			tr = createAndAttach(tbody, "tr");
 			tr.setAttribute('id', key);
 			tr.setAttribute('onclick', 'clicked(this, event);');
-			createAndAttachWithText(tr, "td", fingerprints[key].value() + "%");
+			createAndAttachWithText(tr, "td", fingerprints[key].changedCount + 
+					" of " + fingerprints[key].count);
 			createAndAttachWithTextWraped(tr, "td", key);
 			createButtonAndAttach(tr, key);
 			
@@ -158,7 +159,7 @@
 		//Prepare head for Types
 		var thead = createAndAttach(table, "thead");
 		var tr = createAndAttach(thead, "tr");
-		createAndAttachWithText(tr, "th", "%");
+		createAndAttachWithText(tr, "th", "Chnages");
 		createAndAttachWithText(tr, "th", "Type");
 		createAndAttachWithText(tr, "th", "Count");
 		createAndAttach(tr, "th").setAttribute('class', 'col-xs-1');
@@ -170,7 +171,8 @@
 			tr = createAndAttach(tbody, "tr");
 			tr.setAttribute('id', id + key);
 			tr.setAttribute('onclick', 'clicked(this, event);');
-			createAndAttachWithText(tr, "td", types[key].value() + '%');
+			createAndAttachWithText(tr, "td", types[key].changedCount + 
+					" of " + types[key].count);
 			createAndAttachWithTextWraped(tr, "td", key);
 			
 		  	if (types[key].hasOwnProperty('array'))

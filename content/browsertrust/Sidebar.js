@@ -27,17 +27,11 @@ BrowserTrust.Sidebar =
     },
     
     /**
-     * Add the fingerprint to the UI
-     * 
-     * @param {fingerprint} fingerprint to be added to the sidebar
+     * Toggles the sidebar display to the user
      */
-    addFingerprint : function(fingerprint) 
+    toggleDisplay : function() 
 	{
-    	var sidebar = this.getSidebar();
-    	if (sidebar != null) 
-		{
-    		//sidebar.addFingerprint(fingerprint);
-    	}
+    	toggleSidebar("viewBrowsertrustSidebar");
     },
     
     /**

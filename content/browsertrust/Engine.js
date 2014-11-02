@@ -15,6 +15,7 @@ function ResultObject() {
 	this.array = [];
 	this.count = 0;
 	this.resultCount = 0;
+	this.changedCount = 0;
 	this.result = 0;
 	this.value = function(){
 		if (this.resultCount == 0 || this.result == 0) {
@@ -30,6 +31,7 @@ function Fingerprint(hash, host, path, result) {
 	this.hash = hash;
 	this.host = host;
 	this.path = path;
+	this.type = "Other";
 	this.result = result;
 }
 
@@ -78,6 +80,13 @@ BrowserTrust.Engine =
         return window.content.document;
 	},
 	
+	/**
+	 * Add a fingerprint value to the result set
+	 * 
+	 * @param {String} host name for the fingerprints server
+	 * @param {String} path for the fingerprint resource
+	 * @param {Fingerprint} fingerprint the calculated hash for the fingerprint
+	 */
 	addToArray : function(host, path, fingerprint) {
 		
 		fingerprint.result = isNaN(fingerprint.result) ? 0 : fingerprint.result;
@@ -101,7 +110,23 @@ BrowserTrust.Engine =
 		{
 			this.processed[host].array[type].array[path] = new ResultObject();
 			this.processed[host].array[type].count++;
+			this.processed[host].count++;
 		}
+		
+		//Update the changedCount if the result has been altered
+		if (this.processed[host].array[type].array[path].result != fingerprint.result) 
+		{
+			var changedCount = 0;
+			if (fingerprint.result == 1) {
+				changedCount = 1;
+			}
+			else if(this.processed[host].array[type].array[path].result == 1) {
+				changedCount = -1;
+			}
+			this.processed[host].changedCount += changedCount;
+			this.processed[host].array[type].changedCount += changedCount;
+		}
+		
 		this.processed[host].array[type].array[path].resultCount++;
 		this.processed[host].array[type].array[path].result += fingerprint.result;
 	},
@@ -263,7 +288,6 @@ BrowserTrust.Engine =
 			var fingerprint = this.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
 			this.addToArray(tracer.getURIHost(), tracer.getURIpath(), fingerprint);
 			BrowserTrust.Storage.storeFingerprint(fingerprint);
-			BrowserTrust.Sidebar.addFingerprint(fingerprint);
 		}
 		BrowserTrust.Sidebar.loadAllFingerprints();
 	}
