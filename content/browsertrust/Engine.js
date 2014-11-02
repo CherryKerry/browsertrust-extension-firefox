@@ -14,6 +14,7 @@ if ("undefined" == typeof(BrowserTrust)) {
 function ResultObject() {
 	this.array = [];
 	this.count = 0;
+	this.isDynamic = false;
 	this.resultCount = 0;
 	this.changedCount = 0;
 	this.result = 0;
@@ -22,7 +23,7 @@ function ResultObject() {
 			return 0;
 		} 
 		else {
-			return (this.result / this.resultCount * 100).toFixed(0);
+			return parseInt((this.result / this.resultCount) * 100, 10);
 		}
 	}
 }
@@ -89,46 +90,73 @@ BrowserTrust.Engine =
 	 */
 	addToArray : function(host, path, fingerprint) {
 		
+		var isDynamic = BrowserTrust.Storage.isUriDynamic(host+path);
+		
 		fingerprint.result = isNaN(fingerprint.result) ? 0 : fingerprint.result;
 		if (this.processed.hasOwnProperty(host) == false)
 		{
 			this.processed[host] = new ResultObject();
 		}
-		this.processed[host].resultCount++;
 		this.processed[host].result += fingerprint.result;
+		this.processed[host].resultCount++;
 		
 		var type = "Other"; //Get other need to be written
 		if (this.processed[host].array.hasOwnProperty(type) == false)
 		{
 			this.processed[host].array[type] = new ResultObject();
-			this.processed[host].count++;
 		}
-		this.processed[host].array[type].resultCount++;
 		this.processed[host].array[type].result += fingerprint.result;
+		this.processed[host].array[type].resultCount++;
 
 		if (this.processed[host].array[type].array.hasOwnProperty(path) == false)
 		{
 			this.processed[host].array[type].array[path] = new ResultObject();
 			this.processed[host].array[type].count++;
 			this.processed[host].count++;
+			if (fingerprint.result == 1 || isDynamic) 
+			{
+				this.processed[host].changedCount++;
+				this.processed[host].array[type].changedCount++;
+			}
 		}
-		
-		//Update the changedCount if the result has been altered
-		if (this.processed[host].array[type].array[path].result != fingerprint.result) 
+		else
 		{
-			var changedCount = 0;
-			if (fingerprint.result == 1) {
-				changedCount = 1;
+			//Update the changedCount if the result has been altered
+			if (this.processed[host].array[type].array[path].result != fingerprint.result) 
+			{
+				var changedCount = 0;
+				if (fingerprint.result == 1 || isDynamic) {
+					changedCount = 1;
+				}
+				else if(this.processed[host].array[type].array[path].result == 1) {
+					changedCount = -1;
+				}
+				this.processed[host].changedCount += changedCount;
+				this.processed[host].array[type].changedCount += changedCount;
 			}
-			else if(this.processed[host].array[type].array[path].result == 1) {
-				changedCount = -1;
-			}
-			this.processed[host].changedCount += changedCount;
-			this.processed[host].array[type].changedCount += changedCount;
 		}
 		
 		this.processed[host].array[type].array[path].resultCount++;
 		this.processed[host].array[type].array[path].result += fingerprint.result;
+		this.processed[host].array[type].array[path].isDynamic = isDynamic;
+	},
+	
+	toggleResourseAsDynamic : function(host, type, path) 
+	{
+		var resourse = this.processed[host].array[type].array[path];
+		var changedCount = resourse.value() != 100 ? 1 : 0;
+		if (resourse.isDynamic) 
+		{
+			BrowserTrust.Storage.setUriAsStatic(host+path);
+			changedCount *= -1;  //Value needs to be taken away from results
+		} 
+		else 
+		{
+			BrowserTrust.Storage.setUriAsDynamic(host+path);
+		}	
+		resourse.isDynamic = !resourse.isDynamic;
+		this.processed[host].changedCount += changedCount;
+		this.processed[host].array[type].changedCount += changedCount;
 	},
 	
 	/**
@@ -152,11 +180,6 @@ BrowserTrust.Engine =
 	 */
 	compareFingerprintLocal : function(fingerprint) 
 	{
-		//Case if the page is to be excluded, return 1
-		var excluded = BrowserTrust.Storage.isUriDynamic(fingerprint.uri);
-		if (excluded) {
-			return 1;
-		}
 		//Case look through history
 		var history = BrowserTrust.Storage.getFingerprints(fingerprint);
 		var matching = 0;
@@ -175,11 +198,6 @@ BrowserTrust.Engine =
 	 */
 	compareFingerprintRemote : function(fingerprint) 
 	{
-		//Case if the page is to be excluded, return 1
-		var excluded = BrowserTrust.Storage.isUriDynamic(fingerprint.uri);
-		if (excluded) {
-			return 1;
-		}
 		//Case look through history
 		var json = BrowserTrust.Server.getFingerprints(fingerprint);
 		var matching = 0;

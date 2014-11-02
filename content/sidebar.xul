@@ -10,6 +10,13 @@
 	xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 	onload="load()">
+	
+	<menupopup 
+		id="resourseMenu">
+	  <menuitem 
+	  	  label="Toggle Resourse As Dynamic"
+	  	  onclick="toggleResourseAsDynamic()"/>
+	</menupopup>
 
 	<vbox>
 	  <html:div class="row" id="buttonBox" >
@@ -36,6 +43,47 @@
 	</vbox>
   
 <script type="text/javascript">
+	
+	var resourseSelected = null;
+	
+	function toggleResourseAsDynamic()
+	{
+		var host = resourseSelected.getAttribute('host');
+		var type = resourseSelected.getAttribute('type');
+		
+		var hostText = document.getElementById(host+':changes');
+		var typeText = document.getElementById(host+type+':changes');
+		
+		var changesCount = resourseSelected.getAttribute('fpValue') != 100 ? 1 : 0;
+		if (resourseSelected.getAttribute('class') == 'warning') 
+		{
+			resourseSelected.setAttribute('class', '');
+			changesCount *= -1;
+		}
+		else 
+		{
+			resourseSelected.setAttribute('class', 'warning');
+		}
+		hostText.setAttribute('changed', Number(hostText.getAttribute('changed')) + changesCount);
+		typeText.setAttribute('changed', Number(typeText.getAttribute('changed')) + changesCount);
+		
+		hostText.innerHTML = hostText.getAttribute('changed') + ' of ' + hostText.getAttribute('count');
+		typeText.innerHTML = typeText.getAttribute('changed') + ' of ' + typeText.getAttribute('count');
+		
+		var event = document.createEvent("Events");
+		event.initEvent("BrowserTrustSidebarToggleResourse", true, false);
+		this.dispatchEvent(event);
+	}
+	
+	/**
+	 * Display the resources popup menu to the user
+	 */
+	function showResourseMenu(element)
+	{
+		var menu = document.getElementById('resourseMenu');
+		menu.openPopup(element, "after_start", 0, 0, false, false);
+		resourseSelected = element;
+	}
   	
   	/**
   	 * Table action that sets the visibility of tables and animates
@@ -120,8 +168,12 @@
 			tr = createAndAttach(tbody, "tr");
 			tr.setAttribute('id', key);
 			tr.setAttribute('onclick', 'clicked(this, event);');
-			createAndAttachWithText(tr, "td", fingerprints[key].changedCount + 
+			var changes = createAndAttachWithText(tr, "td", fingerprints[key].changedCount + 
 					" of " + fingerprints[key].count);
+			changes.setAttribute('id', key+':changes');
+			changes.setAttribute('changed', fingerprints[key].changedCount);
+			changes.setAttribute('count', fingerprints[key].count);
+			
 			createAndAttachWithTextWraped(tr, "td", key);
 			createButtonAndAttach(tr, key);
 			
@@ -159,7 +211,7 @@
 		//Prepare head for Types
 		var thead = createAndAttach(table, "thead");
 		var tr = createAndAttach(thead, "tr");
-		createAndAttachWithText(tr, "th", "Chnages");
+		createAndAttachWithText(tr, "th", "Changes");
 		createAndAttachWithText(tr, "th", "Type");
 		createAndAttachWithText(tr, "th", "Count");
 		createAndAttach(tr, "th").setAttribute('class', 'col-xs-1');
@@ -171,8 +223,12 @@
 			tr = createAndAttach(tbody, "tr");
 			tr.setAttribute('id', id + key);
 			tr.setAttribute('onclick', 'clicked(this, event);');
-			createAndAttachWithText(tr, "td", types[key].changedCount + 
+			var changes = createAndAttachWithText(tr, "td", types[key].changedCount + 
 					" of " + types[key].count);
+			changes.setAttribute('id', id+key+':changes');
+			changes.setAttribute('changed', types[key].changedCount);
+			changes.setAttribute('count', types[key].count);
+			
 			createAndAttachWithTextWraped(tr, "td", key);
 			
 		  	if (types[key].hasOwnProperty('array'))
@@ -187,7 +243,7 @@
 				var td = createAndAttach(tr, "td");
 				td.setAttribute('colspan', '4');
 				
-				buildResourceTables(td, id + key, types[key].array);
+				buildResourceTables(td, id, key, types[key].array);
 			}
 			else
 			{
@@ -203,8 +259,9 @@
 	 * @param id the key of the parent
 	 * @param resources the array of resources in the tree
 	 */
-	function buildResourceTables(parent, id, resources)
+	function buildResourceTables(parent, host, type, resources)
 	{
+		var id = host + type;
 		//Prepare main table
 		var table = createAndAttach(parent, "table");
 		table.setAttribute('class', 'table table-striped table-bordered table-condensed');
@@ -220,6 +277,15 @@
 		for (key in resources)
 		{
 			tr = createAndAttach(tbody, "tr");
+			tr.setAttribute('oncontextmenu', 'showResourseMenu(this);');
+			tr.setAttribute('path', key);
+			tr.setAttribute('type', type);
+			tr.setAttribute('host', host);
+			tr.setAttribute('fpValue', resources[key].value());
+			if (resources[key].isDynamic) 
+			{
+				tr.setAttribute('class', 'warning');
+			}
 			createAndAttachWithText(tr, "td", resources[key].value() + '%');
 			createAndAttachWithTextWraped(tr, "td", key);
 		}

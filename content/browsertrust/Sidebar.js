@@ -27,14 +27,6 @@ BrowserTrust.Sidebar =
     },
     
     /**
-     * Toggles the sidebar display to the user
-     */
-    toggleDisplay : function() 
-	{
-    	toggleSidebar("viewBrowsertrustSidebar");
-    },
-    
-    /**
      * Load all the fingerprints to the sidebar
      */
     loadAllFingerprints : function() 
@@ -42,6 +34,27 @@ BrowserTrust.Sidebar =
 		var sidebar = BrowserTrust.Sidebar.getSidebar();
 		if (sidebar != null) {
     		sidebar.buildTable(BrowserTrust.Engine.processed);
+    	}
+    },
+    
+    /**
+     * Toggles the sidebar display to the user
+     */
+    toggleDisplay : function() 
+	{
+    	toggleSidebar("viewBrowsertrustSidebar");
+    },
+    
+    toggleResourse : function() 
+	{
+		var sidebar = BrowserTrust.Sidebar.getSidebar();
+		if (sidebar != null) {
+			//Get the values from the sidebar
+    		var host = sidebar.resourseSelected.getAttribute('host');
+    		var type = sidebar.resourseSelected.getAttribute('type');
+    		var path = sidebar.resourseSelected.getAttribute('path');
+    		//Set the processed tree element as dynamic
+    		BrowserTrust.Engine.toggleResourseAsDynamic(host, type, path);
     	}
     },
     
@@ -58,4 +71,5 @@ BrowserTrust.Sidebar =
 
 //Add the listeneing event for when the sidebar loads
 document.addEventListener("BrowserTrustSidebarLoadRequest", BrowserTrust.Sidebar.loadAllFingerprints, false, true);
+document.addEventListener("BrowserTrustSidebarToggleResourse", BrowserTrust.Sidebar.toggleResourse, false, true);
 document.addEventListener("BrowserTrustSidebarClearRequest", BrowserTrust.Sidebar.clearAllFingerprints, false, true);
