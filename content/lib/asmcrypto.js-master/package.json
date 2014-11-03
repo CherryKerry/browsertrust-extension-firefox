@@ -1,0 +1,31 @@
+{
+    "name": "asmcrypto.js",
+    "description": "Asm.js implementation of WebCrypto API",
+    "homepage": "https://github.com/vibornoff/asmcrypto.js",
+    "main": "asmcrypto.js",
+    "version": "0.0.3",
+    "maintainers": [{
+        "name": "Artem S Vybornov",
+        "email": "vybornov@gmail.com",
+        "web": "http://github.com/vibornoff"
+    }],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vibornoff/asmcrypto.js.git"
+    },
+    "devDependencies": {
+        "uglify-js": "vibornoff/UglifyJS2",
+        "grunt": "~0.4.2",
+        "grunt-cli": "~0.1",
+        "grunt-contrib-uglify": "~0.2.2",
+        "grunt-contrib-qunit": "~0.4.0",
+        "grunt-contrib-connect": "~0.7.1",
+        "grunt-contrib-watch": "~0.2.0",
+        "grunt-saucelabs": "~8.0.0",
+        "grunt-contrib-clean": "~0.4.0"
+    },
+    "scripts": {
+        "prepublish": "grunt",
+        "test": "grunt test"
+    }
+}

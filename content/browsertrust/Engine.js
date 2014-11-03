@@ -49,7 +49,7 @@ BrowserTrust.Engine =
 	 */
 	fingerprint : function(uri, data) {
 		var fingerprint = {
-			hash:Sha256.hash(data, false),
+			hash:asmCrypto.SHA256.hex(data),
 			uri	:uri,
 			result : 0
 		};

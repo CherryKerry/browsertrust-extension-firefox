@@ -143,7 +143,6 @@
 	function buildTable(fingerprints)
 	{	
 		//get the host div
-		console.log("Loading sidetable");
 		var mainTable = document.createElement('thml:div'); // document.getElementById('mainTable');
 		
 		var scrolldiv = createAndAttach(mainTable, "div");

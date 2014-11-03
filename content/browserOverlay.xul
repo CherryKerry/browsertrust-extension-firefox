@@ -7,7 +7,7 @@
 <overlay id="browsertrust-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script type="application/x-javascript" src="chrome://browsertrust/content/test/Test.js" />
-  <script type="application/x-javascript" src="chrome://browsertrust/content/lib/sha256.js" />
+  <script type="application/x-javascript" src="chrome://browsertrust/content/lib/asmcrypto.js-master/asmcrypto.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/HelloWorld.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Engine.js" />
   <script type="application/x-javascript" src="chrome://browsertrust/content/browsertrust/Listeners.js" />
