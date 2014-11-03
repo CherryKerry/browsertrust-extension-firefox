@@ -24,7 +24,7 @@
   
   <!-- Sidebar -->
   <menupopup id="viewSidebarMenu">
-    <menuitem key="key_openSidebar" observes="viewSidebar"  />
+    <menuitem key="key_openSidebar" observes="viewBrowsertrustSidebar"  />
   </menupopup>
   
   <keyset id="mainKeyset">
@@ -54,7 +54,7 @@
   
   <toolbarbutton id="browsertrust-button"
 	  label="Custom"
-	  tooltiptext="My custom toolbar button"
+	  tooltiptext="Open Browser Trust Sidebar"
 	  oncommand="BrowserTrust.Sidebar.toggleDisplay();"
 	  class="toolbarbutton-1 custombutton"
   />
@@ -79,6 +79,9 @@
       	accesskey="&browsertrust.menu.accesskey;"
       	insertafter="helpMenu">
       <menupopup>
+      	<menuitem 
+      		key="key_openSidebar" 
+      		observes="viewBrowsertrustSidebar" />
         <menuitem id="browsertrust-menu-test"
           	label="&browsertrust.test.label;"
           	accesskey="&browsertrust.test.accesskey;"
