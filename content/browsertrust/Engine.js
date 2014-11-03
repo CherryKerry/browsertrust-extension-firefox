@@ -122,13 +122,13 @@ BrowserTrust.Engine =
 		else
 		{
 			//Update the changedCount if the result has been altered
-			if (this.processed[host].array[type].array[path].result != fingerprint.result) 
+			if (this.processed[host].array[type].array[path].value() != fingerprint.result*100) 
 			{
 				var changedCount = 0;
-				if (fingerprint.result == 1 || isDynamic) {
+				if (fingerprint.result == 1) {
 					changedCount = 1;
 				}
-				else if(this.processed[host].array[type].array[path].result == 1) {
+				else if(this.processed[host].array[type].array[path].value() == 100) {
 					changedCount = -1;
 				}
 				this.processed[host].changedCount += changedCount;
