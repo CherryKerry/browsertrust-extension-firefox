@@ -141,6 +141,23 @@ BrowserTrust.Engine =
 		this.processed[host].array[type].array[path].isDynamic = isDynamic;
 	},
 	
+	checkForAlert : function() 
+	{
+		var errorFound = false;
+		for (host in this.processed)
+		{
+			errorFound |= this.processed[host].count != this.processed[host].changedCount
+		}
+		if (errorFound) 
+		{
+			turnButtonRed();
+		}
+		else
+		{
+			turnButtonGreen();
+		}
+	},
+	
 	toggleResourseAsDynamic : function(host, type, path) 
 	{
 		var resourse = this.processed[host].array[type].array[path];
@@ -157,6 +174,7 @@ BrowserTrust.Engine =
 		resourse.isDynamic = !resourse.isDynamic;
 		this.processed[host].changedCount += changedCount;
 		this.processed[host].array[type].changedCount += changedCount;
+		this.checkForAlert();
 	},
 	
 	/**
@@ -310,5 +328,6 @@ BrowserTrust.Engine =
 			BrowserTrust.Storage.storeFingerprint(fingerprint);
 		}
 		BrowserTrust.Sidebar.loadAllFingerprints();
+		this.checkForAlert();
 	}
 };

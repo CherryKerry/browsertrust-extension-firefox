@@ -65,6 +65,7 @@ BrowserTrust.Sidebar =
 	{
 		BrowserTrust.Engine.processed = [];
 		BrowserTrust.Sidebar.loadAllFingerprints();
+		turnButtonGreen();
     }
     
 }
